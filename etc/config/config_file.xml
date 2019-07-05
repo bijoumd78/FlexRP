@@ -7,9 +7,9 @@
 		<name>producer</name>
 	</ReconModule-->
 
-	<ReconModule>
+	<reader>
 		<name>worker1</name>
-	</ReconModule>
+	</reader>
 
 	<ReconModule>
 		<name>worker2</name>
@@ -19,8 +19,8 @@
 		<name>worker3</name>
 	</ReconModule>
 	
-	<ReconModule>
+	<writer>
 		<name>consumer</name>
-	</ReconModule>
+	</writer>
 
 </FleXReconPipelineConfiguration>

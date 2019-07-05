@@ -30,7 +30,7 @@ int main (int argc, char *argv[])
 
     //  Socket for worker control
     zmq::socket_t controller (context, ZMQ_PUB);
-    controller.bind("tcp://*:5559");
+    controller.bind("tcp://*:7777");
 
     //  Wait for start of batch
     s_recv (receiver);
