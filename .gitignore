@@ -33,3 +33,6 @@
 
 # HDF5 data
 *.h5
+
+# CMake duplicate
+*.user

@@ -60,11 +60,8 @@ int main(int argc, char **argv)
     for (size_t ii = 0; ii < reconModules.size()-1; ++ii)
     {
         auto exec = std::string{"./"} + reconModules[ii];
-       // auto arg1 =  (ii+1) % 2 != 1 ? connect_port + std::to_string(5+ii)   : bind_port + std::to_string(5+ii)  ;
-       // auto arg2 =  (ii+1) % 2 != 1 ? connect_port + std::to_string(5+ii+1) : bind_port + std::to_string(5+ii+1);
-
-        auto arg1 =  (ii+1) % 2 != 1 ? connect_port + std::to_string(5+ii) : bind_port + std::to_string(5+ii);
-        auto arg2 =  (ii+1) % 2 != 1 ? bind_port + std::to_string(5+ii+1)      : connect_port + std::to_string(5+ii+1);
+       auto arg1 =  (ii+1) % 2 == 1 ? connect_port + std::to_string(5+ii)   : bind_port + std::to_string(5+ii)  ;
+       auto arg2 =  (ii+1) % 2 == 1 ? connect_port + std::to_string(5+ii+1) : bind_port + std::to_string(5+ii+1);
 
         std::cout << arg1 << "  " << arg2 << std::endl;
 
@@ -72,17 +69,15 @@ int main(int argc, char **argv)
         ++count;
     }
 
-
     // Launch the consumer
     const auto last_module_index = reconModules.size()-1;
     const auto exec1 = std::string{"./"} + reconModules[last_module_index];
 
-    auto args1 =  count % 2 != 0 ?  bind_port + std::to_string(5+count) : connect_port + std::to_string(5+count);
+    auto args1 = count%2 == 0 ? connect_port + std::to_string(5+count) : bind_port + std::to_string(5+count);
 
     std::cout << args1 << std::endl;
 
     bp::spawn(exec1, args1, g);
-
     g.wait();
     //} catch () {
 

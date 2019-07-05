@@ -27,15 +27,11 @@ int main (int argc, char *argv[])
     
     //  Socket to receive messages on
     zmq::socket_t receiver(context, ZMQ_PULL);
-    //receiver.connect("tcp://localhost:5557");
-    //receiver.connect(argv[1]);
-      receiver.bind(argv[1]);
+    receiver.connect(argv[1]);
 
     //  Socket to send messages to
     zmq::socket_t sender(context, ZMQ_PUSH);
-    //sender.connect("tcp://localhost:5558");
     sender.connect(argv[2]);
-    //sender.bind(argv[2]);
 
     //  Socket for control input
     zmq::socket_t controller (context, ZMQ_SUB);
@@ -66,14 +62,14 @@ int main (int argc, char *argv[])
                 std::cerr << "Failed to parse incoming ISMRMRD Header\n";
             }
 
+            std::cout << "\n\n" <<"I am worker 3 \n";
+
             std::cout <<  h.userParameters->userParameterLong[0].name << " is " << h.userParameters->userParameterLong[0].value << std::endl;
 
 
             //*** Message body
             receiver.recv(&body_msg);
             auto acq = static_cast<complex_float_t*>(body_msg.data());
-
-            std::cout <<"I am worker 3 \n";
 
             std::cout << "Data:: " << real(acq[4]) << " " << imag(acq[4]) << std::endl;
 
@@ -87,7 +83,7 @@ int main (int argc, char *argv[])
         //  Any waiting controller command acts as 'KILL'
         if (items [1].revents & ZMQ_POLLIN) {
             std::cout << std::endl;
-            break;                      //  Exit loop
+            break;
         }
     }
     //  Finished

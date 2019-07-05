@@ -32,8 +32,7 @@ int main (int argc, char* argv[])
 
     //  Socket to send messages on
     zmq::socket_t  sender(context, ZMQ_PUSH);
-    //sender.bind("tcp://*:5555");
-    sender.connect("tcp://localhost:5555");
+    sender.bind("tcp://*:5555");
 
     std::cout << "Press Enter when the workers are ready: " << std::endl;
     getchar ();
@@ -92,8 +91,6 @@ int main (int argc, char* argv[])
 
     //ismrmrd_cleanup_acquisition(&acq);
     ismrmrd_close_dataset(&dataset);
-
-    //sleep (1);              //  Give 0MQ time to deliver
 
     return 0;
 }

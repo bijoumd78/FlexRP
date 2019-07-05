@@ -26,9 +26,7 @@ int main (int argc, char *argv[])
 
     //  Socket to receive messages on
     zmq::socket_t receiver (context, ZMQ_PULL);
-    //receiver.bind("tcp://*:5558");
     receiver.bind(argv[1]);
-    //receiver.connect(argv[1]);
 
     //  Socket for worker control
     zmq::socket_t controller (context, ZMQ_PUB);
@@ -70,6 +68,8 @@ int main (int argc, char *argv[])
             std::cerr << "Failed to parse incoming ISMRMRD Header\n";
         }
 
+        std::cout << "\n\n" << "I am the last worker in the chain..\n";
+
         std::cout <<  h.userParameters->userParameterLong[0].name << " is " << h.userParameters->userParameterLong[0].value << std::endl;
 
 
@@ -94,18 +94,12 @@ int main (int argc, char *argv[])
         tdiff.tv_usec = tend.tv_usec - tstart.tv_usec;
     }
 
-    std::cout << "\nI am the last worker in the chain..\n";
-
     auto total_msec = static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
     std::cout << "\nTotal elapsed time: " << total_msec
               << " msec\n" << std::endl;
 
     //  Send kill signal to workers
     s_send (controller, "KILL");
-
-    //  Finished
-    sleep (1);              //  Give 0MQ time to deliver
-
 
     return 0;
 }
