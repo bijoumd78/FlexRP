@@ -76,11 +76,8 @@ int main (int argc, char *argv[])
 
             s_sleep(5000);
 
-
-
             sender.send(message);
             sender.send(body_msg);
-
         }
         //  Any waiting controller command acts as 'KILL'
         if (items [1].revents & ZMQ_POLLIN) {
