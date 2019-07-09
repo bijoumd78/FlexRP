@@ -13,8 +13,8 @@
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 #include <unistd.h>
 #include <spdlog/spdlog.h>
 #include <cstring>
@@ -59,7 +59,7 @@ int main (int argc, char* argv[])
     ismrmrd_open_dataset(&dataset, false);
 
     /* Read the header */
-    char *xmlstring = ismrmrd_read_header(&dataset);
+    auto xmlstring = ismrmrd_read_header(&dataset);
     message.rebuild(strlen(xmlstring));
     memcpy(message.data(), xmlstring, strlen(xmlstring));
     sender.send(message);

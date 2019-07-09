@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
     s_recv (receiver);
 
     //  Start our clock now
-    struct timeval tstart;
+    struct timeval tstart{};
     gettimeofday (&tstart, nullptr);
 
     
