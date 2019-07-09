@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <iostream>
+#include <spdlog/spdlog.h>
 #include <cstring>
 
 
@@ -24,7 +24,7 @@ int main (int argc, char* argv[])
 {
 
     if(argc < 2){
-        std::cout << "Usage: send_req input_file_name\n";
+        spdlog::error("Usage: {} input_file_name", argv[0]);
         return -1;
     }
 
@@ -34,9 +34,9 @@ int main (int argc, char* argv[])
     zmq::socket_t  sender(context, ZMQ_PUSH);
     sender.bind("tcp://*:5555");
 
-    std::cout << "Press Enter when the workers are ready: " << std::endl;
+    spdlog::info("Press Enter when the workers are ready!");
     getchar ();
-    std::cout << "Sending tasks to workers...\n" << std::endl;
+    spdlog::info("Sending tasks to workers...");
 
     //  The first message is "0" and signals start of batch
     zmq::socket_t sink(context, ZMQ_PUSH);
@@ -82,7 +82,7 @@ int main (int argc, char* argv[])
 
     ismrmrd_read_acquisition(&dataset, index, &acq);
 
-    std::cout << "Data:: " << real(acq.data[4]) << " " << imag(acq.data[4]) << std::endl;
+    spdlog::info("Data:: {} {}", real(acq.data[4]), imag(acq.data[4]));
 
     zmq::message_t body_msg(2*index*sizeof(float));
     std::memcpy(body_msg.data(), acq.data, 2*index*sizeof(float));

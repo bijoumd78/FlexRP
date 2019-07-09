@@ -7,7 +7,7 @@
  *****************************************************************************/
 
 #include "zhelpers.hpp"
-
+#include <spdlog/spdlog.h>
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
@@ -18,7 +18,7 @@ int main (int argc, char *argv[])
 {
     if (argc < 2)
     {
-        std::cout << "Usage: producer input_port\n";
+        spdlog::error("Usage: producer input_port");
         return EXIT_FAILURE;
     }
 
@@ -65,19 +65,19 @@ int main (int argc, char *argv[])
         }
         catch (...)
         {
-            std::cerr << "Failed to parse incoming ISMRMRD Header\n";
+            spdlog::error("Failed to parse incoming ISMRMRD Header");
         }
 
-        std::cout << "\n\n" << "I am the last worker in the chain..\n";
+        spdlog::info("I am the last worker in the chain...");
 
-        std::cout <<  h.userParameters->userParameterLong[0].name << " is " << h.userParameters->userParameterLong[0].value << std::endl;
+        spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
 
 
         //*** Message body
         receiver.recv(&body_msg);
         auto acq = static_cast<complex_float_t*>(body_msg.data());
 
-        std::cout << "Data:: " << real(acq[4]) << " " << imag(acq[4]) << std::endl;
+        spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
         //  }
     }
 
@@ -95,8 +95,7 @@ int main (int argc, char *argv[])
     }
 
     auto total_msec = static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
-    std::cout << "\nTotal elapsed time: " << total_msec
-              << " msec\n" << std::endl;
+    spdlog::info("Total elapsed time: {} msec",  total_msec);
 
     //  Send kill signal to workers
     s_send (controller, "KILL");

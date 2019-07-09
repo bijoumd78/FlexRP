@@ -40,6 +40,7 @@ else()
   find_package(Boost 1.67.0 COMPONENTS system thread program_options filesystem timer REQUIRED)
 endif()
 
+find_package(spdlog REQUIRED)
 find_package(ZeroMQ REQUIRED)
 find_package(HDF5 1.8 COMPONENTS C CXX HL REQUIRED)
 find_package(FFTW3 COMPONENTS single double REQUIRED)

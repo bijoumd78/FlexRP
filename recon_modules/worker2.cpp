@@ -7,7 +7,7 @@
  *****************************************************************************/
 
 #include "zhelpers.hpp"
-
+#include <spdlog/spdlog.h>
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
@@ -19,7 +19,7 @@ int main (int argc, char *argv[])
 {
     if (argc < 3)
     {
-        std::cout << "Usage: worker2 input_port output_port\n";
+        spdlog::error("Usage: {} input_port output_port", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -60,23 +60,21 @@ int main (int argc, char *argv[])
             }
             catch (...)
             {
-                std::cerr << "Failed to parse incoming ISMRMRD Header\n";
+                spdlog::error("Failed to parse incoming ISMRMRD Header");
             }
 
-            std::cout<< "\n\n" <<"I am worker 2 \n";
+            spdlog::info("I am worker 2");
 
-            std::cout <<  h.userParameters->userParameterLong[0].name << " is " << h.userParameters->userParameterLong[0].value << std::endl;
+            spdlog::info("{} is {}",h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
 
 
             //*** Message body
             receiver.recv(&body_msg);
             auto acq = static_cast<complex_float_t*>(body_msg.data());
 
-            std::cout << "Data:: " << real(acq[4]) << " " << imag(acq[4]) << std::endl;
+            spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
 
             s_sleep(5000);
-
-
 
             sender.send(message);
             sender.send(body_msg);
@@ -84,7 +82,6 @@ int main (int argc, char *argv[])
         }
         //  Any waiting controller command acts as 'KILL'
         if (items [1].revents & ZMQ_POLLIN) {
-            std::cout << std::endl;
             break;
         }
     }
