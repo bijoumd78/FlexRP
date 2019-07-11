@@ -2,10 +2,6 @@
 
 <FleXReconPipelineConfiguration>
 	<!--FleXRecon pipeline configuration template -->	
-	
-	<!--ReconModule>
-		<name>producer</name>
-	</ReconModule-->
 
 	<reader>
 		<name>worker1</name>

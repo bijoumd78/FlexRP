@@ -7,12 +7,12 @@
  *****************************************************************************/
 
 #include <zmq.hpp>
-
+#include <boost/program_options.hpp>
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
-
+#include <exception>
 #include <cstdlib>
 #include <cstdio>
 #include <unistd.h>
@@ -22,12 +22,52 @@
 
 int main (int argc, char* argv[])
 {
+    namespace po = boost::program_options;
+    std::string in_h5_filename{};
+    std::string config_xml_filename{};
 
-    if(argc < 2){
-        spdlog::error("Usage: {} input_file_name", argv[0]);
-        return -1;
+    try{
+        po::options_description desc("Allowed options");
+        desc.add_options()
+                ("help", "produce help message")
+                ("filename,f", po::value<std::string>(&in_h5_filename), "Input file")
+                ("config,c", po::value<std::string>(&config_xml_filename)->default_value("config_file.xml"), "FlexRP Configuration file (remote)")
+                ;
+
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+
+        if (vm.count("help")) {
+            std::cout << desc <<std::endl;
+            return 0;
+        }
+
+        if (vm.count("filename")) {
+            spdlog::info("The input filename is {}", vm["filename"].as<std::string>());
+        } else {
+            spdlog::error( "h5 data file name is required!");
+            std::cout << desc <<std::endl;
+            return EXIT_FAILURE;
+        }
+
+        if (vm.count("config")) {
+            spdlog::info("The configuration file is {}", vm["config"].as<std::string>());
+        } else {
+            spdlog::error( "The configuration file is required!");
+            std::cout << desc <<std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+    catch(std::exception& e) {
+        spdlog::error( "error: {}", e.what());
+        return EXIT_FAILURE;
+    }
+    catch(...) {
+        spdlog::error( "Exception of unknown type!" );
     }
 
+    // Program starts here
     zmq::context_t context (1);
 
     //  Socket to send messages on
@@ -45,20 +85,17 @@ int main (int argc, char* argv[])
     memcpy(message.data(), "0", 1);
     sink.send(message);
 
-
     // Load ISMRMD file
     ISMRMRD::ISMRMRD_Acquisition acq;
     ISMRMRD::ISMRMRD_Dataset dataset;
     uint32_t index;
     uint32_t nacq_read;
-    const char *filename = argv[1];
     const char *groupname = "/dataset";
-    
 
-    ismrmrd_init_dataset(&dataset, filename, groupname);
+    ismrmrd_init_dataset(&dataset, in_h5_filename.c_str(), groupname);
     ismrmrd_open_dataset(&dataset, false);
 
-    /* Read the header */
+    // Read the header
     auto xmlstring = ismrmrd_read_header(&dataset);
     message.rebuild(strlen(xmlstring));
     memcpy(message.data(), xmlstring, strlen(xmlstring));
@@ -66,11 +103,10 @@ int main (int argc, char* argv[])
     // Cleanup and close the stream
     free(xmlstring);
 
-
-    /** Get the raw data **/
-    /* Get the number of acquisitions */
+    // Get the raw data
+    // Get the number of acquisitions
     nacq_read = ismrmrd_get_number_of_acquisitions(&dataset);
-    /* read the next to last one */
+    // read the next to last one
     ismrmrd_init_acquisition(&acq);
     index = 0;
     if (nacq_read>1) {
@@ -88,8 +124,6 @@ int main (int argc, char* argv[])
     std::memcpy(body_msg.data(), acq.data, 2*index*sizeof(float));
     sender.send(body_msg);
 
-
-    //ismrmrd_cleanup_acquisition(&acq);
     ismrmrd_close_dataset(&dataset);
 
     return 0;
