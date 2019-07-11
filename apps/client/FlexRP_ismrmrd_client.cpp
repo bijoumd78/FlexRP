@@ -108,13 +108,7 @@ int main (int argc, char* argv[])
     nacq_read = ismrmrd_get_number_of_acquisitions(&dataset);
     // read the next to last one
     ismrmrd_init_acquisition(&acq);
-    index = 0;
-    if (nacq_read>1) {
-        index = nacq_read - 1;
-    }
-    else {
-        index = 0;
-    }
+    index = nacq_read>1 ? nacq_read - 1 : 0;
 
     ismrmrd_read_acquisition(&dataset, index, &acq);
 
