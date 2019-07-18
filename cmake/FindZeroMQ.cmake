@@ -8,6 +8,7 @@
 # ZeroMQ_INCLUDE_DIRS - Location of ZeroMQ includes
 # ZeroMQ_LIBRARIES - ZeroMQ libraries
 
+
 if(NOT ZeroMQ_ROOT)
   set(ZeroMQ_ROOT "$ENV{ZeroMQ_ROOT}")
 endif()
