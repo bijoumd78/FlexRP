@@ -8,7 +8,9 @@
 
 #include <zmq.hpp>
 #include <boost/program_options.hpp>
+#include <boost/asio/io_service.hpp>
 #include <ismrmrd/ismrmrd.h>
+#include "flexrp_client.h"
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
@@ -31,7 +33,7 @@ int main (int argc, char* argv[])
         desc.add_options()
                 ("help", "produce help message")
                 ("filename,f", po::value<std::string>(&in_h5_filename), "Input file")
-                ("config,c", po::value<std::string>(&config_xml_filename)->default_value("config_file.xml"), "FlexRP Configuration file (remote)")
+                ("config,c", po::value<std::string>(&config_xml_filename), "FlexRP Configuration file (remote)")
                 ;
 
         po::variables_map vm;
@@ -66,6 +68,29 @@ int main (int argc, char* argv[])
     catch(...) {
         spdlog::error( "Exception of unknown type!" );
     }
+
+    // Send configuration file
+    // FlexRP_client::send_xml_config_file(config_xml_filename);
+
+    const std::string address{"localhost"};
+    const std::string port{"8080"};
+    const std::string filePath {config_xml_filename};
+
+    try {
+        boost::asio::io_service ioService;
+
+        boost::asio::ip::tcp::resolver resolver(ioService);
+        auto endpointIterator = resolver.resolve({ address, port });
+        FlexRP_client::Client client(ioService, endpointIterator, filePath);
+
+        ioService.run();
+    } catch (std::fstream::failure& e) {
+        spdlog::error(e.what());
+    } catch (std::exception& e) {
+        spdlog::error("Exception: {}", e.what());
+    }
+
+
 
     // Program starts here
     zmq::context_t context (1);
