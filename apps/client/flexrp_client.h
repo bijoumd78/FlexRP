@@ -7,8 +7,6 @@
 
 namespace FlexRP_client {
 
- //void send_xml_config_file(const std::string &config_file);
-
  class Client
  {
  public:
@@ -44,7 +42,7 @@ namespace FlexRP_client {
  {
      boost::asio::async_write(m_socket,
          t_buffer,
-         [this](boost::system::error_code ec, size_t /*length*/)
+         [this](boost::system::error_code ec, size_t)
          {
              doWriteFile(ec);
          });

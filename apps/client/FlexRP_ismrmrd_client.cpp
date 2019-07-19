@@ -70,8 +70,6 @@ int main (int argc, char* argv[])
     }
 
     // Send configuration file
-    // FlexRP_client::send_xml_config_file(config_xml_filename);
-
     const std::string address{"localhost"};
     const std::string port{"8080"};
     const std::string filePath {config_xml_filename};
@@ -89,8 +87,6 @@ int main (int argc, char* argv[])
     } catch (std::exception& e) {
         spdlog::error("Exception: {}", e.what());
     }
-
-
 
     // Program starts here
     zmq::context_t context (1);
