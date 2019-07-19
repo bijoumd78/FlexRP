@@ -34,6 +34,7 @@
 #
 # $Id: FindFFTW3.cmake 15918 2010-06-25 11:12:42Z loose $
 
+
 # Use double precision by default.
 if(FFTW3_FIND_COMPONENTS MATCHES "^$")
   set(_components double)
