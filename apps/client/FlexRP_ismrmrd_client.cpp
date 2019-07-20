@@ -95,8 +95,6 @@ int main (int argc, char* argv[])
     zmq::socket_t  sender(context, ZMQ_PUSH);
     sender.bind("tcp://*:5555");
 
-    spdlog::info("Press Enter when the workers are ready!");
-    getchar ();
     spdlog::info("Sending tasks to workers...");
 
     //  The first message is "0" and signals start of batch

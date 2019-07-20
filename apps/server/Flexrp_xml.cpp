@@ -230,11 +230,11 @@ void run_processes(const Flexrp_configuration &fcg)
         std::for_each(fcg.readers.cbegin(),
                       fcg.readers.cend(),
                       [&](const Readers &r){
-            auto exec = std::string{"./"} + r.name;
+            auto exec = bp::search_path(r.name.c_str());
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::info("{} {} {}", exec, arg1, arg2 );
+            spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2 );
 
             bp::spawn(exec, arg1, arg2, g);
             ++count;
@@ -244,11 +244,11 @@ void run_processes(const Flexrp_configuration &fcg)
         std::for_each(fcg.recon_modules.cbegin(),
                       fcg.recon_modules.cend(),
                       [&](const Recon_modules &rc){
-            auto exec = std::string{"./"} + rc.name;
+            auto exec = bp::search_path(rc.name.c_str());
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::info("{} {} {}", exec, arg1, arg2);
+            spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2);
 
             bp::spawn(exec, arg1, arg2, g);
             ++count;
@@ -258,11 +258,11 @@ void run_processes(const Flexrp_configuration &fcg)
         std::for_each(fcg.writers.cbegin(),
                       fcg.writers.cend(),
                       [&](const Writers &w){
-            auto exec = std::string{"./"} + w.name;
+            auto exec = bp::search_path(w.name.c_str());
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::info("{} {}", exec, arg1);
+            spdlog::debug("{} {}", exec.c_str(), arg1);
 
             bp::spawn(exec, arg1, g);
             ++count;

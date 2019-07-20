@@ -16,7 +16,6 @@ int main()
         } catch (std::exception& e) {
             spdlog::error("Exception: {}", e.what() );
         }
-
     }
 }
 
