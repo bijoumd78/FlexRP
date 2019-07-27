@@ -19,7 +19,6 @@ protected:
     zmq::message_t message;
     zmq::message_t body_msg;
     zmq::pollitem_t items [2];
-    
 };
 
 class Module_Worker_2 {
@@ -36,7 +35,6 @@ protected:
     zmq::message_t message;
     zmq::message_t body_msg;
     zmq::pollitem_t items [2];
-
 };
 
 // Collects completed works
@@ -55,7 +53,6 @@ protected:
     zmq::message_t body_msg;
     zmq::pollitem_t items [2];
     struct timeval tstart;
-    
 };
 
 }

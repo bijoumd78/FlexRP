@@ -6,19 +6,19 @@
  * Version: 0.0.1
  *****************************************************************************/
 
-#include "core/Base_Modules.h"
+#include "Base_Modules.h"
 #include <spdlog/spdlog.h>
 
 int main (int argc, char *argv[])
 {
-    if (argc < 2)
+    if (argc < 3)
     {
-        spdlog::error("Usage: {} input_port", argv[0]);
+        spdlog::error("Usage: {} input_port output_port", argv[0]);
         return EXIT_FAILURE;
     }
 
-    FleXRP::Module_Sink s(argv[1]);
-    s.process();
+    FleXRP::Module_Worker_1 w(argv[1], argv[2]);
+    w.process();
 
     return EXIT_SUCCESS;
 }
