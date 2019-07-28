@@ -1,9 +1,5 @@
 #include "Base_Modules.h"
 #include <spdlog/spdlog.h>
-#include <ismrmrd/ismrmrd.h>
-#include <ismrmrd/dataset.h>
-#include <ismrmrd/meta.h>
-#include <ismrmrd/xml.h>
 #include "zhelpers.hpp"
 
 
@@ -25,51 +21,20 @@ Module_Worker_1::Module_Worker_1(const char *protocol1, const char *protocol2) :
     items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
-int Module_Worker_1::process()
+int Module_Worker_1::Init()
 {
-    //  Process messages from both sockets
-    while (true) {
-        zmq::poll (&items [0], 2, -1);
-
-        if (items [0].revents & ZMQ_POLLIN) {
-            receiver.recv(&message);
-
-            // Deserialize the header
-            ISMRMRD::IsmrmrdHeader h;
-            try
-            {
-                ISMRMRD::deserialize( static_cast<char *>(message.data()), h );
-            }
-            catch (...)
-            {
-                spdlog::error("Failed to parse incoming ISMRMRD Header");
-            }
-
-            spdlog::info("I am worker 1");
-
-            spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
-
-
-            //*** Message body
-            receiver.recv(&body_msg);
-            auto acq = static_cast<complex_float_t*>(body_msg.data());
-
-            spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
-
-            //  Do the work
-            s_sleep(1000);
-
-            sender.send(message);
-            sender.send(body_msg);
-        }
-        //  Any waiting controller command acts as 'KILL'
-        if (items [1].revents & ZMQ_POLLIN) {
-            break;
-        }
-    }
     return EXIT_SUCCESS;
 }
 
+int Module_Worker_1::prepare()
+{
+    return EXIT_SUCCESS;
+}
+
+int Module_Worker_1::finalize()
+{
+    return EXIT_SUCCESS;
+}
 
 Module_Worker_2::Module_Worker_2(const char *protocol1, const char *protocol2) :
     context   ( 1                 ),
@@ -87,49 +52,18 @@ Module_Worker_2::Module_Worker_2(const char *protocol1, const char *protocol2) :
     items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
-int Module_Worker_2::process()
+int Module_Worker_2::Init()
 {
-    //  Process messages from both sockets
-    while (true) {
-        zmq::poll (&items [0], 2, -1);
+    return EXIT_SUCCESS;
+}
 
-        if (items [0].revents & ZMQ_POLLIN) {
-            receiver.recv(&message);
+int Module_Worker_2::prepare()
+{
+    return EXIT_SUCCESS;
+}
 
-            // Deserialize the header
-            ISMRMRD::IsmrmrdHeader h;
-            try
-            {
-                ISMRMRD::deserialize( static_cast<char *>(message.data()), h );
-            }
-            catch (...)
-            {
-                spdlog::error("Failed to parse incoming ISMRMRD Header");
-            }
-
-            spdlog::info("I am worker 1");
-
-            spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
-
-
-            //*** Message body
-            receiver.recv(&body_msg);
-            auto acq = static_cast<complex_float_t*>(body_msg.data());
-
-            spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
-
-
-            //  Do the work
-            s_sleep(1000);
-
-            sender.send(message);
-            sender.send(body_msg);
-        }
-        //  Any waiting controller command acts as 'KILL'
-        if (items [1].revents & ZMQ_POLLIN) {
-            break;
-        }
-    }
+int Module_Worker_2::finalize()
+{
     return EXIT_SUCCESS;
 }
 
@@ -152,40 +86,6 @@ Module_Sink::Module_Sink(const char *protocol):
     items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
-int Module_Sink::process()
-{
-
-    zmq::poll (&items [0], 2, -1);
-
-    if (items [0].revents & ZMQ_POLLIN) {
-        receiver.recv(&message);
-
-        // Deserialize the header
-        ISMRMRD::IsmrmrdHeader h;
-        try
-        {
-            ISMRMRD::deserialize( static_cast<char *>(message.data()), h );
-        }
-        catch (...)
-        {
-            spdlog::error("Failed to parse incoming ISMRMRD Header");
-        }
-
-        spdlog::info("I am the last worker in the chain...");
-
-        spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
-
-
-        //*** Message body
-        receiver.recv(&body_msg);
-        auto acq = static_cast<complex_float_t*>(body_msg.data());
-
-        spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
-    }
-
-    return EXIT_SUCCESS;
-}
-
 Module_Sink::~Module_Sink()
 {
     // Calculate and report duration of batch
@@ -206,6 +106,21 @@ Module_Sink::~Module_Sink()
 
     // Send kill signal to workers
     s_send (controller, "KILL");
+}
+
+int Module_Sink::Init()
+{
+    return EXIT_SUCCESS;
+}
+
+int Module_Sink::prepare()
+{
+    return EXIT_SUCCESS;
+}
+
+int Module_Sink::finalize()
+{
+    return EXIT_SUCCESS;
 }
 
 } // End of FleXR

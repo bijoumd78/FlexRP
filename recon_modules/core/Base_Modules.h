@@ -9,7 +9,12 @@ class Module_Worker_1 {
 
 public:
     Module_Worker_1(const char *protocol1, const char *protocol2);
-    int process();
+    virtual ~Module_Worker_1() = default;
+
+    virtual int Init();
+    virtual int prepare();
+    virtual int process() = 0;
+    virtual int finalize();
 
 protected:
     zmq::context_t context;
@@ -25,7 +30,12 @@ class Module_Worker_2 {
 
 public:
     Module_Worker_2(const char *protocol1, const char *protocol2 );
-    int process();
+    virtual ~Module_Worker_2() = default;
+
+    virtual int Init();
+    virtual int prepare();
+    virtual int process() = 0;
+    virtual int finalize();
 
 protected:
     zmq::context_t context;
@@ -42,8 +52,12 @@ class Module_Sink{
 
 public:
     Module_Sink(const char *protocol);
-    int process();
-    ~Module_Sink();
+    virtual ~Module_Sink();
+
+    virtual int Init();
+    virtual int prepare();
+    virtual int process() = 0;
+    virtual int finalize();
 
 protected:
     zmq::context_t context;

@@ -1,9 +1,15 @@
 include_directories(../core)
 
-add_executable(worker3 worker3.cpp)
-#target_include_directories(worker3 PUBLIC ${ZeroMQ_INCLUDE_DIRS} ${ISMRMRD_DIRS})
-#target_link_libraries(worker3 PUBLIC ${ZeroMQ_LIBRARIES} ${ISMRMRD_LIBRARIES} PRIVATE spdlog::spdlog)
-target_link_libraries(worker3 PRIVATE Base_Modules spdlog::spdlog)
+set( SRC
+     worker3.h
+     worker3.cpp
+     )
+
+add_library(worker3_lib ${SRC})
+target_link_libraries(worker3_lib PRIVATE Base_Modules spdlog::spdlog)
+
+add_executable(worker3 main.cpp)
+target_link_libraries(worker3 PRIVATE worker3_lib)
 
 #install
 install (TARGETS
