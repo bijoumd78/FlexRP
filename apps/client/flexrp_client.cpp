@@ -3,14 +3,18 @@
 #include <boost/filesystem/path.hpp>
 #include <string>
 #include <iostream>
-
+#include <utility>
 
 namespace FlexRP_client {
 
 Client::Client(IoService& t_ioService, TcpResolverIterator t_endpointIterator,
                std::string const& t_path)
-    : m_ioService(t_ioService), m_socket(t_ioService),
-      m_endpointIterator(t_endpointIterator), m_path(t_path)
+    : m_ioService(t_ioService),
+      m_socket(t_ioService),
+      m_endpointIterator(std::move(t_endpointIterator)),
+      m_buf(),
+      m_path(t_path)
+
 {
     doConnect();
     openFile(m_path);
