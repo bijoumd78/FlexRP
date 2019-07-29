@@ -15,7 +15,7 @@ namespace FlexRP_client {
      using TcpResolverIterator = TcpResolver::iterator;
      using TcpSocket = boost::asio::ip::tcp::socket;
 
-     Client(IoService& t_ioService, TcpResolverIterator t_endpointIterator,
+     Client(IoService& t_ioService, const TcpResolverIterator &t_endpointIterator,
          std::string const& t_path);
 
  private:

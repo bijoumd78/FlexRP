@@ -7,7 +7,7 @@
 
 namespace FlexRP_client {
 
-Client::Client(IoService& t_ioService, TcpResolverIterator t_endpointIterator,
+Client::Client(IoService& t_ioService, const TcpResolverIterator &t_endpointIterator,
                std::string const& t_path)
     : m_ioService(t_ioService),
       m_socket(t_ioService),

@@ -44,7 +44,7 @@ namespace  FLEXRP
     public:
         using TcpSocket = boost::asio::ip::tcp::socket;
 
-        Session(TcpSocket t_socket);
+        explicit Session(TcpSocket t_socket);
 
         void start()
         {
