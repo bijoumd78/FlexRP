@@ -10,8 +10,10 @@
 
 namespace  FLEXRP
 {
-Session::Session(TcpSocket t_socket)
-    : m_socket(std::move(t_socket))
+Session::Session(TcpSocket t_socket): 
+	m_socket  ( std::move(t_socket) ),
+	m_fileSize( 0                    )
+	  
 {
 }
 
@@ -265,7 +267,7 @@ void run_processes(const Flexrp_configuration &fcg)
             spdlog::debug("{} {}", exec.c_str(), arg1);
 
             bp::spawn(exec, arg1, g);
-            ++count;
+           // ++count;
         });
 
         g.wait();

@@ -51,7 +51,7 @@ protected:
 class Module_Sink{
 
 public:
-    Module_Sink(const char *protocol);
+    explicit Module_Sink(const char *protocol);
     virtual ~Module_Sink();
 
     virtual int Init();
