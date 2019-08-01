@@ -5,7 +5,7 @@
 
 namespace FleXRP{
 
-class Worker1 : public Module_Worker_1
+class Worker1 final : public Module_Worker_1
 {
 public:
     Worker1(const char *protocol1, const char *protocol2);

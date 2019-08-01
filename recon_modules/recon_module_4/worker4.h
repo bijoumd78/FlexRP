@@ -5,7 +5,7 @@
 
 namespace FleXRP {
 
-class Worker4 : public Module_Sink
+class Worker4 final : public Module_Sink
 {
 public:
     explicit Worker4(const char *protocol);
