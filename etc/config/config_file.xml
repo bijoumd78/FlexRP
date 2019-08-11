@@ -15,7 +15,7 @@
 
 	<ReconModule>
 		<name>worker3</name>
-		<property><name>dummy_3</name><value>bool</value></property>
+		<property><name>dummy_3</name><value>True</value></property>
                 <property><name>dummy_4</name><value>hello_property</value></property>
 	</ReconModule>
 	
