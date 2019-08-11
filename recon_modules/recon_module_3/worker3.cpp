@@ -1,4 +1,5 @@
 #include "worker3.h"
+#include "flexrpsharedmemory.h"
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
@@ -42,6 +43,13 @@ int FleXRP::Worker3::process()
             auto acq = static_cast<complex_float_t*>(body_msg.data());
 
             spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+
+            //Get properties (name, value)
+            const size_t n = 4;
+            std::vector<std::string> property;
+            FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
+            for(size_t e = 0 ; e < n ; e+=2)
+                spdlog::info("Property(name, value)  {} : {}", property[e], property[e+1]);
 
             //  Do the work
             s_sleep(1000);

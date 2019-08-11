@@ -4,7 +4,7 @@ set( SOURCES
     )
 
 add_library(Flexrp_xml ${SOURCES})
-target_link_libraries(Flexrp_xml PUBLIC pugixml ${Boost_LIBRARIES} PRIVATE spdlog::spdlog)
+target_link_libraries(Flexrp_xml PUBLIC pugixml ${Boost_LIBRARIES} PRIVATE spdlog::spdlog FlexSharedMemory)
 
 add_executable(FleXRP main.cpp)
 target_link_libraries(FleXRP PUBLIC Flexrp_xml)

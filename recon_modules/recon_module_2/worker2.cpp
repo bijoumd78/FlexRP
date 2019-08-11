@@ -1,4 +1,5 @@
 #include "worker2.h"
+#include "flexrpsharedmemory.h"
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
@@ -16,6 +17,7 @@ int Worker2::process()
 {
     //  Process messages from both sockets
     while (true) {
+
         zmq::poll (&items [0], 2, -1);
 
         if (items [0].revents & ZMQ_POLLIN) {
@@ -43,6 +45,12 @@ int Worker2::process()
 
             spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
 
+            //Get properties (name, value)
+            const size_t n = 4;
+            std::vector<std::string> property;
+            FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
+            for(size_t e = 0 ; e < n ; e+=2)
+                spdlog::info("Property(name, value)  {} : {}", property[e], property[e+1]);
 
             //  Do the work
             s_sleep(1000);

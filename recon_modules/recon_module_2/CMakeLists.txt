@@ -6,7 +6,7 @@ set( SRC
      )
 
 add_library(worker2_lib ${SRC})
-target_link_libraries(worker2_lib PRIVATE Base_Modules spdlog::spdlog)
+target_link_libraries(worker2_lib PRIVATE Base_Modules spdlog::spdlog FlexSharedMemory)
 
 add_executable(worker2 main.cpp)
 target_link_libraries(worker2 PRIVATE worker2_lib)

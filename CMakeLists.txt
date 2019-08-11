@@ -20,7 +20,7 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-include_directories(./third-party)
+include_directories(./include)
 include_directories(/usr/include/hdf5/serial)
 
 set(Boost_USE_STATIC_LIBS OFF)
@@ -49,5 +49,6 @@ find_package(FFTW3 COMPONENTS single double REQUIRED)
 find_package(ISMRMRD REQUIRED)
 link_directories(${ISMRMRD_LIBRARY_DIRS})
 
+add_subdirectory(include)
 add_subdirectory(apps)
 add_subdirectory(recon_modules)

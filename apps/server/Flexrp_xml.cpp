@@ -1,8 +1,14 @@
 #include "Flexrp_xml.h"
 #include "pugixml.hpp"
+#include "flexrpsharedmemory.h"
 #include <boost/asio/read_until.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/process.hpp>
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/functional/hash.hpp>
+#include <functional>
 #include <spdlog/spdlog.h>
 #include <stdexcept>
 #include <algorithm>
@@ -10,10 +16,11 @@
 
 namespace  FLEXRP
 {
+
 Session::Session(TcpSocket t_socket): 
-	m_socket  ( std::move(t_socket) ),
-	m_fileSize( 0                    )
-	  
+    m_socket  ( std::move(t_socket) ),
+    m_fileSize( 0                    )
+
 {
 }
 
@@ -30,7 +37,6 @@ void Session::doRead()
             handleError(__FUNCTION__, ec);
     });
 }
-
 
 void Session::processRead(size_t t_bytesTransferred)
 {
@@ -219,8 +225,9 @@ void deserialize(Flexrp_configuration &fcg)
 
 void run_processes(const Flexrp_configuration &fcg)
 {
-    namespace bp = boost::process;
+    // Create a shared memory for the workers properties
 
+    namespace bp = boost::process;
     try {
 
         bp::group g;
@@ -252,6 +259,22 @@ void run_processes(const Flexrp_configuration &fcg)
 
             spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2);
 
+            if(!rc.properties.empty()){
+
+                spdlog::info("{}", rc.name.data());
+                std::vector<std::string> v;
+
+                for (auto e : rc.properties ){
+                    spdlog::debug("{} : {}", e.name, e.value);
+                    v.emplace_back(e.name);
+                    v.emplace_back(e.value);
+                }
+
+                // Fill the shared memory
+                FlEXRP::FlexRPSharedMemory::createSharedMemory(v);
+
+            }
+
             bp::spawn(exec, arg1, arg2, g);
             ++count;
         });
@@ -267,7 +290,7 @@ void run_processes(const Flexrp_configuration &fcg)
             spdlog::debug("{} {}", exec.c_str(), arg1);
 
             bp::spawn(exec, arg1, g);
-           // ++count;
+            // ++count;
         });
 
         g.wait();

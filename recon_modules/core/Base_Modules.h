@@ -2,6 +2,7 @@
 #define BASE_MODULES_H
 
 #include <zmq.hpp>
+#include <boost/interprocess/managed_shared_memory.hpp>
 
 namespace FleXRP{
 
