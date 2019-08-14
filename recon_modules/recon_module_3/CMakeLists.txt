@@ -1,9 +1,9 @@
 include_directories(../core)
 
 set( SRC
-     worker3.h
-     worker3.cpp
-     )
+    worker3.h
+    worker3.cpp
+    )
 
 add_library(worker3_lib ${SRC})
 target_link_libraries(worker3_lib PRIVATE Base_Modules spdlog::spdlog FlexSharedMemory)
@@ -13,4 +13,16 @@ target_link_libraries(worker3 PRIVATE worker3_lib)
 
 #install
 install (TARGETS
-         worker3 DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+    worker3
+    ARCHIVE
+    DESTINATION ${INSTALL_LIBDIR}
+    COMPONENT lib
+    RUNTIME
+    DESTINATION ${INSTALL_BINDIR}
+    COMPONENT bin
+    LIBRARY
+    DESTINATION ${INSTALL_LIBDIR}
+    COMPONENT lib
+    PUBLIC_HEADER
+    DESTINATION ${INSTALL_INCLUDEDIR}
+    COMPONENT dev)

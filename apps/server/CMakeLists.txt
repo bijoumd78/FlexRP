@@ -1,6 +1,6 @@
 set( SOURCES
-             Flexrp_xml.h
-             Flexrp_xml.cpp
+    Flexrp_xml.h
+    Flexrp_xml.cpp
     )
 
 add_library(Flexrp_xml ${SOURCES})
@@ -11,5 +11,16 @@ target_link_libraries(FleXRP PUBLIC Flexrp_xml)
 
 #install
 install (TARGETS
-         FleXRP
-         DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+    FleXRP
+    ARCHIVE
+    DESTINATION ${INSTALL_LIBDIR}
+    COMPONENT lib
+    RUNTIME
+    DESTINATION ${INSTALL_BINDIR}
+    COMPONENT bin
+    LIBRARY
+    DESTINATION ${INSTALL_LIBDIR}
+    COMPONENT lib
+    PUBLIC_HEADER
+    DESTINATION ${INSTALL_INCLUDEDIR}
+    COMPONENT dev)
