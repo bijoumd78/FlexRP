@@ -28,9 +28,9 @@ RUN cd /opt/code && \
     cd ismrmrd && \
     mkdir build && \
     cd build && \
-    cmake ../ && \
-    make -j $(nproc) && \
-    make install
+    cmake -G Ninja ../ && \
+    ninja && \
+    ninja install
 
 # Intall spdlog
 RUN cd /opt/code && \
@@ -38,9 +38,9 @@ RUN cd /opt/code && \
     cd spdlog && \
     mkdir build && \
     cd build && \
-    cmake ../ && \
-    make -j $(nproc) && \
-    make install
+    cmake -G Ninja../ && \
+    ninja && \
+    ninja install
 
 #Set more environment variables in preparation for FlexRP installation
 ENV FLEXRP_HOME=/usr/local \
