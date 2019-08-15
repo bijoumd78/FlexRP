@@ -10,7 +10,10 @@ RUN apt-get update --quiet\
     && apt-get install libhdf5-serial-dev \
     && apt-get install libfftw3-dev \
     && apt-get install libpugixml-dev \
-    && apt-get install ninja-build
+    && apt-get install libzmq3-dev \
+    && apt-get install ninja-build \
+    && apt-get install vim \
+    && apt-get install tmux
 
 # Install Boost
 RUN mkdir /opt/code
@@ -41,6 +44,7 @@ RUN cd /opt/code && \
     cmake -G Ninja../ && \
     ninja && \
     ninja install
+
 
 #Set more environment variables in preparation for FlexRP installation
 ENV FLEXRP_HOME=/usr/local \
