@@ -13,6 +13,7 @@ target_link_libraries(worker3 PRIVATE worker3_lib)
 
 #install
 install (TARGETS
+    worker3_lib
     worker3
     ARCHIVE
     DESTINATION ${INSTALL_LIBDIR}

@@ -11,6 +11,7 @@ target_link_libraries(FleXRP PUBLIC Flexrp_xml)
 
 #install
 install (TARGETS
+    Flexrp_xml
     FleXRP
     ARCHIVE
     DESTINATION ${INSTALL_LIBDIR}

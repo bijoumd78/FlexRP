@@ -13,6 +13,7 @@ target_link_libraries(consumer PRIVATE worker4_lib)
 
 #install
 install (TARGETS
+    worker4_lib
     consumer
     ARCHIVE
     DESTINATION ${INSTALL_LIBDIR}

@@ -14,6 +14,7 @@ target_link_libraries(FlexRP_ismrmrd_client PUBLIC ${ZeroMQ_LIBRARIES} ${ISMRMRD
 
 #install
 install (TARGETS
+    FlexRP_client
     FlexRP_ismrmrd_client
     ARCHIVE
     DESTINATION ${INSTALL_LIBDIR}

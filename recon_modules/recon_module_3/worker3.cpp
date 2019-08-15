@@ -48,8 +48,9 @@ int FleXRP::Worker3::process()
             const size_t n = 4;
             std::vector<std::string> property;
             FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
-            for(size_t e = 0 ; e < n ; e+=2)
+            for(size_t e = 0 ; e < n ; e+=2){
                 spdlog::info("Property(name, value)  {} : {}", property[e], property[e+1]);
+            }
 
             //  Do the work
             s_sleep(1000);
