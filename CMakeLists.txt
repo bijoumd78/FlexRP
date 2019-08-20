@@ -75,4 +75,25 @@ link_directories(${ISMRMRD_LIBRARY_DIRS})
 add_subdirectory(include)
 add_subdirectory(apps)
 add_subdirectory(recon_modules)
-add_subdirectory(test)
+include_directories(test)
+
+# Testing code
+include(CTest)
+enable_testing()
+
+if(BUILD_TESTING)
+
+add_executable(test_FlexRPSharedMemory ${CMAKE_CURRENT_LIST_DIR}/test/test_FlexRPSharedMemory.cpp)
+target_link_libraries(test_FlexRPSharedMemory FlexSharedMemory)
+
+# Define test
+add_test(
+  NAME FLexRPSharedMemory_test
+  COMMAND $<TARGET_FILE:test_FlexRPSharedMemory> --success
+  )
+endif(BUILD_TESTING)
+
+
+
+
+

@@ -1,36 +1,28 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2/catch.hpp"
+#include "flexrpsharedmemory.h"
+#include <vector>
+#include <string>
 
-TEST_CASE( "vectors can be sized and resized", "[vector]" )
+TEST_CASE( "Get recon module property values", "Properties" )
 {
 
-    std::vector<int> v( 5 );
+    static std::vector<std::string> properties{"1", "3.14", "false", "Hello unit test"};
+    FlEXRP::FlexRPSharedMemory::createSharedMemory(properties);
 
-    REQUIRE( v.size() == 5 );
-    REQUIRE( v.capacity() >= 5 );
 
-    SECTION( "resizing bigger changes size and capacity" ) {
-        v.resize( 10 );
+    REQUIRE( properties.size() == 4);
 
-        REQUIRE( v.size() == 10 );
-        REQUIRE( v.capacity() >= 10 );
+    static std::vector<std::string> values;
+    FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(values, 4);
+
+    SECTION( "Get property values" ) {
+
+
+        REQUIRE(  std::stoi(values[0] ) == 1 );
+        REQUIRE(  std::stof(values[1] ) == Approx( 3.14f ) );
+        REQUIRE(  FlEXRP::FlexRPSharedMemory::to_bool(values[2]) == false );
+        REQUIRE(  values[3] == std::string{"Hello unit test"} );
     }
-    SECTION( "resizing smaller changes size but not capacity" ) {
-        v.resize( 0 );
 
-        REQUIRE( v.size() == 0 );
-        REQUIRE( v.capacity() >= 5 );
-    }
-    SECTION( "reserving bigger changes capacity but not size" ) {
-        v.reserve( 10 );
-
-        REQUIRE( v.size() == 5 );
-        REQUIRE( v.capacity() >= 10 );
-    }
-    SECTION( "reserving smaller does not change size or capacity" ) {
-        v.reserve( 0 );
-
-        REQUIRE( v.size() == 5 );
-        REQUIRE( v.capacity() >= 5 );
-    }
 }
