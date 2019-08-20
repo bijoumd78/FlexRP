@@ -1,8 +1,8 @@
-FROM ubuntu:disco
+FROM ubuntu:18.04 AS build
 
 # Install tools required for the project
-RUN apt-get update --quiet\
-    && apt-get install --no-install-recommends --no-install-suggests --yes  \
+RUN apt-get -y update \
+    && apt-get install apt-utils \
     && apt-get install gcc -y \
     && apt-get install g++ -y \
     && apt-get install cmake -y \
@@ -57,7 +57,7 @@ ENV PATH=$PATH:$FLEXRP_HOME/bin:$ISMRMRD_HOME/bin \
 COPY ../../ /FlexRP/ 
 WORKDIR /FlexRP/
 
-RUN    cd /FlexRP \
+RUN cd WORKDIR \
     && mkdir build \
     && cd build    \
     && cmake -G Ninja ../ \
