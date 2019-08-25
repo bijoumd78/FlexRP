@@ -261,7 +261,7 @@ void run_processes(const Flexrp_configuration &fcg)
 
             if(!rc.properties.empty()){
 
-                spdlog::info("{}", rc.name.data());
+                //spdlog::info("{}", rc.name.data());
                 std::vector<std::string> v;
 
                 for (auto e : rc.properties ){

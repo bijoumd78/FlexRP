@@ -1,0 +1,7 @@
+# Test data
+#./etc/data/*
+
+# Duplicate cmakefile
+*.user
+Dockerfile
+
