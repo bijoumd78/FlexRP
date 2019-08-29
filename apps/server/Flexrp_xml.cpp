@@ -243,7 +243,7 @@ void run_processes(const Flexrp_configuration &fcg)
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2 );
+            spdlog::info("{} {} {}", exec.c_str(), arg1, arg2 );
 
             bp::spawn(exec, arg1, arg2, g);
             ++count;
@@ -257,7 +257,7 @@ void run_processes(const Flexrp_configuration &fcg)
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2);
+            spdlog::info("{} {} {}", exec.c_str(), arg1, arg2);
 
             if(!rc.properties.empty()){
 
@@ -287,7 +287,7 @@ void run_processes(const Flexrp_configuration &fcg)
             auto arg1 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count)   : bind_port + std::to_string(5+count)  ;
             auto arg2 =  (count+1) % 2 == 1 ? connect_port + std::to_string(5+count+1) : bind_port + std::to_string(5+count+1);
 
-            spdlog::debug("{} {}", exec.c_str(), arg1);
+            spdlog::info("{} {}", exec.c_str(), arg1);
 
             bp::spawn(exec, arg1, g);
             // ++count;

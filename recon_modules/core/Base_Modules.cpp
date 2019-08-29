@@ -67,7 +67,7 @@ int Module_Worker_2::finalize()
     return EXIT_SUCCESS;
 }
 
-Module_Sink::Module_Sink(const char *protocol):
+Module_Sink_1::Module_Sink_1(const char *protocol):
     context   ( 1                 ),
     receiver  ( context, ZMQ_PULL ),
     controller( context, ZMQ_PUB  ),
@@ -86,7 +86,7 @@ Module_Sink::Module_Sink(const char *protocol):
     items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
-Module_Sink::~Module_Sink()
+Module_Sink_1::~Module_Sink_1()
 {
     // Calculate and report duration of batch
     struct timeval tend, tdiff;
@@ -108,19 +108,75 @@ Module_Sink::~Module_Sink()
     s_send (controller, "KILL");
 }
 
-int Module_Sink::Init()
+int Module_Sink_1::Init()
 {
     return EXIT_SUCCESS;
 }
 
-int Module_Sink::prepare()
+int Module_Sink_1::prepare()
 {
     return EXIT_SUCCESS;
 }
 
-int Module_Sink::finalize()
+int Module_Sink_1::finalize()
 {
     return EXIT_SUCCESS;
 }
 
-} // End of FleXR
+Module_Sink_2::Module_Sink_2(const char *protocol) :
+    context   ( 1                 ),
+    receiver  ( context, ZMQ_PULL ),
+    controller( context, ZMQ_PUB  ),
+    message   (                   ),
+    body_msg  (                   ),
+    tstart    (                   )
+{
+    receiver.connect(protocol);
+    controller.bind("tcp://*:7777");
+    // Wait for start of batch
+    s_recv (receiver);
+    // Start our clock now
+    gettimeofday (&tstart, nullptr);
+    // Process messages from receiver and controller
+    items [0] = { static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0   };
+    items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
+}
+
+Module_Sink_2::~Module_Sink_2()
+{
+    // Calculate and report duration of batch
+    struct timeval tend, tdiff;
+    gettimeofday (&tend, nullptr);
+
+    if (tend.tv_usec < tstart.tv_usec) {
+        tdiff.tv_sec = tend.tv_sec - tstart.tv_sec - 1;
+        tdiff.tv_usec = 1000000 + tend.tv_usec - tstart.tv_usec;
+    }
+    else {
+        tdiff.tv_sec = tend.tv_sec - tstart.tv_sec;
+        tdiff.tv_usec = tend.tv_usec - tstart.tv_usec;
+    }
+
+    auto total_msec = static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
+    spdlog::info("Total elapsed time: {} msec",  total_msec);
+
+    // Send kill signal to workers
+    s_send (controller, "KILL");
+}
+
+int Module_Sink_2::Init()
+{
+    return EXIT_SUCCESS;
+}
+
+int Module_Sink_2::prepare()
+{
+    return EXIT_SUCCESS;
+}
+
+int Module_Sink_2::finalize()
+{
+    return EXIT_SUCCESS;
+}
+
+} // End of FleXRP

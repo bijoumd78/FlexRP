@@ -49,11 +49,11 @@ protected:
 };
 
 // Collects completed works
-class Module_Sink{
+class Module_Sink_1{
 
 public:
-    explicit Module_Sink(const char *protocol);
-    virtual ~Module_Sink();
+    explicit Module_Sink_1(const char *protocol);
+    virtual ~Module_Sink_1();
 
     virtual int Init();
     virtual int prepare();
@@ -70,6 +70,26 @@ protected:
     struct timeval tstart;
 };
 
+class Module_Sink_2{
+
+public:
+    explicit Module_Sink_2(const char *protocol);
+    virtual ~Module_Sink_2();
+
+    virtual int Init();
+    virtual int prepare();
+    virtual int process() = 0;
+    virtual int finalize();
+
+protected:
+    zmq::context_t context;
+    zmq::socket_t receiver;
+    zmq::socket_t controller;
+    zmq::message_t message;
+    zmq::message_t body_msg;
+    zmq::pollitem_t items [2];
+    struct timeval tstart;
+};
 }
 
 #endif //BASE_MODULES_H

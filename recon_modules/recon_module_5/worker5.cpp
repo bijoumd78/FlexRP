@@ -1,4 +1,4 @@
-#include "worker4.h"
+#include "worker5.h"
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/meta.h>
@@ -9,11 +9,11 @@
 
 namespace FleXRP {
 
-Worker4::Worker4(const char *protocol):
-    Module_Sink_1(protocol)
+Worker5::Worker5(const char *protocol):
+    Module_Sink_2(protocol)
 {}
 
-int FleXRP::Worker4::process()
+int FleXRP::Worker5::process()
 {
     zmq::poll (&items [0], 2, -1);
 
@@ -31,7 +31,7 @@ int FleXRP::Worker4::process()
             spdlog::error("Failed to parse incoming ISMRMRD Header");
         }
 
-        spdlog::info("I am the last worker in the chain...");
+        spdlog::info("I am worker 3");
 
         spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
 
@@ -41,6 +41,7 @@ int FleXRP::Worker4::process()
         auto acq = static_cast<complex_float_t*>(body_msg.data());
 
         spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+
     }
 
     return EXIT_SUCCESS;
