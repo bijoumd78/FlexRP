@@ -91,15 +91,11 @@ int main (int argc, char* argv[])
     // Program starts here
     zmq::context_t context (1);
 
-    //  Socket to send messages on
-    zmq::socket_t  sender(context, ZMQ_PUSH);
-    sender.bind("tcp://*:5555");
-
     spdlog::info("Sending tasks to workers...");
 
     //  The first message is "0" and signals start of batch
     zmq::socket_t sink(context, ZMQ_PUSH);
-    sink.connect("tcp://localhost:5558");
+    sink.connect("tcp://localhost:8888");
     zmq::message_t message(2);
     memcpy(message.data(), "0", 1);
     sink.send(message);
@@ -113,6 +109,10 @@ int main (int argc, char* argv[])
 
     ismrmrd_init_dataset(&dataset, in_h5_filename.c_str(), groupname);
     ismrmrd_open_dataset(&dataset, false);
+
+    //  Socket to send messages on
+    zmq::socket_t  sender(context, ZMQ_PUSH);
+    sender.bind("tcp://*:5555");
 
     // Read the header
     auto xmlstring = ismrmrd_read_header(&dataset);

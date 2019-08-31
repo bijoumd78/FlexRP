@@ -71,14 +71,16 @@ Module_Sink_1::Module_Sink_1(const char *protocol):
     context   ( 1                 ),
     receiver  ( context, ZMQ_PULL ),
     controller( context, ZMQ_PUB  ),
+    timer     ( context, ZMQ_PULL ),
     message   (                   ),
     body_msg  (                   ),
     tstart    (                   )
 {
     receiver.bind(protocol);
     controller.bind("tcp://*:7777");
+    timer.bind("tcp://*:8888");
     // Wait for start of batch
-    s_recv (receiver);
+    (void)s_recv (timer);
     // Start our clock now
     gettimeofday (&tstart, nullptr);
     // Process messages from receiver and controller
@@ -127,14 +129,16 @@ Module_Sink_2::Module_Sink_2(const char *protocol) :
     context   ( 1                 ),
     receiver  ( context, ZMQ_PULL ),
     controller( context, ZMQ_PUB  ),
+    timer     ( context, ZMQ_PULL ),
     message   (                   ),
     body_msg  (                   ),
     tstart    (                   )
 {
     receiver.connect(protocol);
     controller.bind("tcp://*:7777");
+    timer.bind("tcp://*:8888");
     // Wait for start of batch
-    s_recv (receiver);
+    (void)s_recv (timer);
     // Start our clock now
     gettimeofday (&tstart, nullptr);
     // Process messages from receiver and controller

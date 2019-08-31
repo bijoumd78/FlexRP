@@ -31,7 +31,7 @@ int FleXRP::Worker5::process()
             spdlog::error("Failed to parse incoming ISMRMRD Header");
         }
 
-        spdlog::info("I am worker 3");
+        spdlog::info("I am the last worker in the chain...");
 
         spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
 
@@ -41,7 +41,6 @@ int FleXRP::Worker5::process()
         auto acq = static_cast<complex_float_t*>(body_msg.data());
 
         spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
-
     }
 
     return EXIT_SUCCESS;
