@@ -9,9 +9,13 @@ The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client
 
     FleXRP
 The client can be launched with the following provided data "data.h5" and one of these templates configuration file (config_file.xml or config_file_2.xml):
-FlexRP_ismrmrd_client -f FlexRP/etc/data/data.h5 -c FlexRP/etc/config/config_file.xml
+
+    FlexRP_ismrmrd_client -f FlexRP/etc/data/data.h5 -c FlexRP/etc/config/config_file.xml
+
+
+## Prerequisites
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTExMzI3NjQ4MzEsLTEzNzI0OTMyMzcsOT
-AxODAyNzI0XX0=
+eyJoaXN0b3J5IjpbMTgxNzMzMDU2LC0xMzcyNDkzMjM3LDkwMT
+gwMjcyNF19
 -->
