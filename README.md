@@ -23,8 +23,9 @@ The client can be launched with the following provided data "data.h5" and one of
  - spdlog
  - ISMRMD
  
+## Build and install FlexRP
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg1NDU2ODgwLC0xMzcyNDkzMjM3LDkwMT
+eyJoaXN0b3J5IjpbNDA2MTc3OTQ3LC0xMzcyNDkzMjM3LDkwMT
 gwMjcyNF19
 -->
