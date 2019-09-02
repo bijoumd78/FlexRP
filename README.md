@@ -8,7 +8,7 @@ The easiest and quickest way to install and run FlexRP framework is by downloadi
 The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client" applications. The Server is launched by typing:
 
     FleXRP
-The client can be launched with the following provided test data "data.h5" and one of these templates configuration file (config_file.xml or config_file_2.xml):
+The client can be launched with the following provided test data "data.h5" and one of these template configuration files (config_file.xml or config_file_2.xml):
 
     FlexRP_ismrmrd_client -f FlexRP/etc/data/data.h5 -c FlexRP/etc/config/config_file.xml
 
@@ -21,7 +21,7 @@ The client can be launched with the following provided test data "data.h5" and o
  - pugixml
  - zmq3
  - spdlog
- - ISMRMD
+ - ISMRMRD
  - cmake 3.6 or higher
  - git
  
@@ -37,6 +37,6 @@ Copy and paste the following commands:
     make install
 Add FlexRP installation directories to your machine search path and you are all set!
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzMTQ0Mjc4NywtMjA1NjUzMjQ0NywxNT
+eyJoaXN0b3J5IjpbMTc5NTU2Mzc5NywtMjA1NjUzMjQ0NywxNT
 E2MTA4MzM3LC0xMzcyNDkzMjM3LDkwMTgwMjcyNF19
 -->
