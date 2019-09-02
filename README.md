@@ -35,8 +35,8 @@ Copy and paste the following commands:
     cmake ..
     make 
     make install
-Add the installation directory to your machine search path and you will 
+Add FlexRP installation directories to your machine search path and you are all set!
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTMzOTc3NjI1MSwtMTM3MjQ5MzIzNyw5MD
+eyJoaXN0b3J5IjpbMTUxNjEwODMzNywtMTM3MjQ5MzIzNyw5MD
 E4MDI3MjRdfQ==
 -->
