@@ -35,8 +35,8 @@ Copy and paste the following commands:
     cmake ..
     make 
     make install
-
+Add the installation directory to your machine search path and you will 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTU3NDA4OTcwMiwtMTM3MjQ5MzIzNyw5MD
+eyJoaXN0b3J5IjpbLTMzOTc3NjI1MSwtMTM3MjQ5MzIzNyw5MD
 E4MDI3MjRdfQ==
 -->
