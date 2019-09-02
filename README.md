@@ -8,10 +8,10 @@ The easiest and quickest way to install and run FlexRP framework is by downloadi
 The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client" applications. The Server is launched by typing:
 
     FleXRP
-The client is launched by calling:
-FlexRP_ismrmrd_client -f FlexR
+The client can be launched with the following provided data "data.h5" and configuration fi:
+FlexRP_ismrmrd_client -f FlexRP/etc
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU2NzUxMjA3OCwtMTM3MjQ5MzIzNyw5MD
+eyJoaXN0b3J5IjpbLTU4MDQ5NzgxNSwtMTM3MjQ5MzIzNyw5MD
 E4MDI3MjRdfQ==
 -->
