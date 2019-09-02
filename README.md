@@ -27,8 +27,16 @@ The client can be launched with the following provided data "data.h5" and one of
  
 ## Build and install FlexRP
 Copy and paste the following commands:
-git clone 
+
+    git clone https://github.com/bijoumd78/FlexRP.git
+    cd FlexRP
+    mkdir build
+    cd build
+    cmake ..
+    make 
+    make install
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyNzAzMjc2ODMsLTEzNzI0OTMyMzcsOT
-AxODAyNzI0XX0=
+eyJoaXN0b3J5IjpbLTU3NDA4OTcwMiwtMTM3MjQ5MzIzNyw5MD
+E4MDI3MjRdfQ==
 -->
