@@ -15,7 +15,15 @@ The client can be launched with the following provided data "data.h5" and one of
 
 ## Prerequisites
 
+ - C++11  or higher compiler
+ - Boost 1.65 or higher version
+ - hdf5
+ - fftw3
+ - pugixml
+ - zmq3
+ - sp 
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTgxNzMzMDU2LC0xMzcyNDkzMjM3LDkwMT
-gwMjcyNF19
+eyJoaXN0b3J5IjpbMTEwNDU5NTMzOSwtMTM3MjQ5MzIzNyw5MD
+E4MDI3MjRdfQ==
 -->
