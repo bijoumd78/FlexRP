@@ -22,10 +22,13 @@ The client can be launched with the following provided data "data.h5" and one of
  - zmq3
  - spdlog
  - ISMRMD
+ - cmake 3.6 or higher
+ - git
  
 ## Build and install FlexRP
-
+Copy and paste the following commands:
+git clone 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDA2MTc3OTQ3LC0xMzcyNDkzMjM3LDkwMT
-gwMjcyNF19
+eyJoaXN0b3J5IjpbLTEyNzAzMjc2ODMsLTEzNzI0OTMyMzcsOT
+AxODAyNzI0XX0=
 -->
