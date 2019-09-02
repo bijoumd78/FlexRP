@@ -5,9 +5,13 @@ FlexRP is a general purpose streaming data processing framework. The primary int
 The easiest and quickest way to install and run FlexRP framework is by downloading one of the pre-built and tested Docker images:
 
     sudo docker run -it --name flexrp bijoumd/flexrp 
-The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client"
+The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client" applications. The Server is launched by typing:
+
+    FleXRP
+The client is launched by calling:
+FlexRP_ismrmrd_client -f FlexR
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwNjYzMTU0MywtMTM3MjQ5MzIzNyw5MD
+eyJoaXN0b3J5IjpbMTU2NzUxMjA3OCwtMTM3MjQ5MzIzNyw5MD
 E4MDI3MjRdfQ==
 -->
