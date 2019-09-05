@@ -19,7 +19,7 @@ The client can be launched with the following provided test data "data.h5" and o
  - hdf5
  - fftw3
  - pugixml
- - zmq3
+ - zmq
  - spdlog
  - ISMRMRD
  - cmake
