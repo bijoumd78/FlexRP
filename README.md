@@ -14,15 +14,15 @@ The client can be launched with the following provided test data "data.h5" and o
 
 
 ## Prerequisites
- - C++11  or higher compiler
- - Boost 1.65 or higher version
+ - C++11 or higher 
+ - Boost
  - hdf5
  - fftw3
  - pugixml
  - zmq3
  - spdlog
  - ISMRMRD
- - cmake 3.6 or higher
+ - cmake
  - git
  
 ## Build and install FlexRP
