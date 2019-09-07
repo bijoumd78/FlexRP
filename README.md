@@ -25,7 +25,7 @@ The client can be launched with the following provided test data "data.h5" and o
  - cmake
  - git
  
-## Build and install FlexRP
+## Build and Install FlexRP
 Copy and paste the following commands:
 
     git clone https://github.com/bijoumd78/FlexRP.git
