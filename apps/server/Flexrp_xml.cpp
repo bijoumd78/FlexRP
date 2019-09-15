@@ -225,8 +225,15 @@ void deserialize(Flexrp_configuration &fcg)
 
 void run_processes(const Flexrp_configuration &fcg)
 {
-    // Create a shared memory for the workers properties
+    //Remove shared memory on construction and destruction
+    namespace bip = boost::interprocess;
+    struct shm_remove
+    {
+        shm_remove() {  bip::shared_memory_object::remove("FlexRPSharedMemory"); }
+        ~shm_remove(){  bip::shared_memory_object::remove("FlexRPSharedMemory"); }
+    } remover;
 
+    // Create a shared memory for the workers properties
     namespace bp = boost::process;
     try {
 
@@ -272,7 +279,6 @@ void run_processes(const Flexrp_configuration &fcg)
 
                 // Fill the shared memory
                 FlEXRP::FlexRPSharedMemory::createSharedMemory(v);
-
             }
 
             bp::spawn(exec, arg1, arg2, g);
