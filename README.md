@@ -2,7 +2,7 @@
 FlexRP is a general-purpose data streaming framework. The primary intent is to enable flexible and scalable image reconstruction using the pipeline architecture where each reconstruction step can be modularized and run on its own process. This software is a Work In Progress (WIP) and it is intended for research use only (See License for details).
 
 ## Quick Start with Docker
-The easiest way to install and run FlexRP framework is to download one of the pre-built and tested Docker images:
+The easiest way to install and to run FlexRP framework is to download one of the pre-built and tested Docker images:
 
     sudo docker run -it --name flexrp bijoumd/flexrp 
 The framework consists of a server "FleXRP" and a client  "FlexRP_ismrmrd_client" applications. The Server is launched by typing:
