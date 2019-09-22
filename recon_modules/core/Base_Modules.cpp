@@ -70,6 +70,7 @@ int Module_Worker_2::finalize()
 Module_Sink_1::Module_Sink_1(const char *protocol):
     context   ( 1                 ),
     receiver  ( context, ZMQ_PULL ),
+    sender_cl ( context, ZMQ_PUSH ),
     controller( context, ZMQ_PUB  ),
     timer     ( context, ZMQ_PULL ),
     message   (                   ),
@@ -77,6 +78,7 @@ Module_Sink_1::Module_Sink_1(const char *protocol):
     tstart    (                   )
 {
     receiver.bind(protocol);
+    sender_cl.connect("tcp://localhost:6666");
     controller.bind("tcp://*:7777");
     timer.bind("tcp://*:8888");
     // Wait for start of batch
@@ -128,6 +130,7 @@ int Module_Sink_1::finalize()
 Module_Sink_2::Module_Sink_2(const char *protocol) :
     context   ( 1                 ),
     receiver  ( context, ZMQ_PULL ),
+    sender_cl ( context, ZMQ_PUSH ),
     controller( context, ZMQ_PUB  ),
     timer     ( context, ZMQ_PULL ),
     message   (                   ),
@@ -135,6 +138,7 @@ Module_Sink_2::Module_Sink_2(const char *protocol) :
     tstart    (                   )
 {
     receiver.connect(protocol);
+    sender_cl.connect("tcp://localhost:6666");
     controller.bind("tcp://*:7777");
     timer.bind("tcp://*:8888");
     // Wait for start of batch

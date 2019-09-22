@@ -41,6 +41,10 @@ int FleXRP::Worker4::process()
         auto acq = static_cast<complex_float_t*>(body_msg.data());
 
         spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+
+        // Send final data to the client
+        sender_cl.send(message);
+        sender_cl.send(body_msg);
     }
 
     return EXIT_SUCCESS;

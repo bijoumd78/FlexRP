@@ -63,11 +63,12 @@ public:
 protected:
     zmq::context_t context;
     zmq::socket_t receiver;
+    zmq::socket_t sender_cl;
     zmq::socket_t controller;
     zmq::socket_t timer;
     zmq::message_t message;
     zmq::message_t body_msg;
-    zmq::pollitem_t items [3];
+    zmq::pollitem_t items [2];
     struct timeval tstart;
 };
 
@@ -85,6 +86,7 @@ public:
 protected:
     zmq::context_t context;
     zmq::socket_t receiver;
+    zmq::socket_t sender_cl;
     zmq::socket_t controller;
     zmq::socket_t timer;
     zmq::message_t message;

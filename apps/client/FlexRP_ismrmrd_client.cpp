@@ -136,8 +136,42 @@ int main (int argc, char* argv[])
     zmq::message_t body_msg(2*index*sizeof(float));
     std::memcpy(body_msg.data(), acq.data, 2*index*sizeof(float));
     sender.send(body_msg);
-
     ismrmrd_close_dataset(&dataset);
+
+    //  Socket to receive message from server
+    zmq::socket_t  receiver_sr(context, ZMQ_PULL);
+    receiver_sr.bind("tcp://*:6666");
+    zmq::pollitem_t items[] = { { static_cast<void *>(receiver_sr), 0, ZMQ_POLLIN, 0 } };
+
+    zmq::poll (&items [0], 1, -1);
+    if (items [0].revents & ZMQ_POLLIN)
+    {
+        receiver_sr.recv(&message);
+        // Deserialize the header
+        ISMRMRD::IsmrmrdHeader h;
+        try
+        {
+            ISMRMRD::deserialize( static_cast<char *>(message.data()), h );
+        }
+        catch (...)
+        {
+            spdlog::error("Failed to parse incoming ISMRMRD Header");
+        }
+
+        spdlog::info("Received data from server...");
+
+        spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
+
+
+        //*** Message body
+        receiver_sr.recv(&body_msg);
+        auto acq = static_cast<complex_float_t*>(body_msg.data());
+
+        spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+
+        // Write data to file
+
+    }
 
     return 0;
 }

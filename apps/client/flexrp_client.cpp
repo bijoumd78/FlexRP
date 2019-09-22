@@ -11,7 +11,7 @@ Client::Client(IoService& t_ioService, const TcpResolverIterator &t_endpointIter
                std::string const& t_path)
     : m_ioService(t_ioService),
       m_socket(t_ioService),
-      m_endpointIterator(std::move(t_endpointIterator)),
+      m_endpointIterator(t_endpointIterator),
       m_buf(),
       m_path(t_path)
 
