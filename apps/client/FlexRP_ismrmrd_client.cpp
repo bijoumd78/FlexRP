@@ -26,6 +26,7 @@ int main (int argc, char* argv[])
 {
     namespace po = boost::program_options;
     std::string in_h5_filename{};
+    std::string out_h5_filename{};
     std::string config_xml_filename{};
 
     try{
@@ -33,7 +34,8 @@ int main (int argc, char* argv[])
         desc.add_options()
                 ("help", "produce help message")
                 ("filename,f", po::value<std::string>(&in_h5_filename), "Input file")
-                ("config,c", po::value<std::string>(&config_xml_filename), "FlexRP Configuration file (remote)")
+                ("outputfile,o", po::value<std::string>(&out_h5_filename)->default_value("out.h5"), "Output file")
+                ("config,c", po::value<std::string>(&config_xml_filename), "FlexRP Configuration file")
                 ;
 
         po::variables_map vm;
@@ -162,15 +164,36 @@ int main (int argc, char* argv[])
 
         spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name, h.userParameters->userParameterLong[0].value);
 
-
         //*** Message body
         receiver_sr.recv(&body_msg);
-        auto acq = static_cast<complex_float_t*>(body_msg.data());
+        const auto acq_r = static_cast<complex_float_t*>(body_msg.data());
 
-        spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+        spdlog::info("Data:: {} {}", real(acq_r[4]), imag(acq_r[4]));
+
 
         // Write data to file
+        ISMRMRD::ISMRMRD_NDArray arr;
+        ISMRMRD::ISMRMRD_Dataset dataset2;
 
+        ismrmrd_init_dataset(&dataset2, out_h5_filename.c_str(), groupname);
+        ismrmrd_open_dataset(&dataset2, true);
+
+        // Write the XML header
+        ismrmrd_write_header(&dataset2, static_cast<char *>(message.data()));
+
+        ismrmrd_init_ndarray(&arr);
+        arr.data_type = ISMRMRD::ISMRMRD_CXFLOAT;
+        arr.ndim = 1;
+        arr.dims[0] = index;
+        ismrmrd_make_consistent_ndarray(&arr);
+
+        memcpy(arr.data, acq_r, 2*index*sizeof(float));
+
+        // Write the data blob
+        ismrmrd_append_array(&dataset2, groupname, &arr);
+
+        // Close the dataset
+        ismrmrd_close_dataset(&dataset2);
     }
 
     return 0;
