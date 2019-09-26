@@ -10,15 +10,12 @@ Module_Worker_1::Module_Worker_1(const char *protocol1, const char *protocol2) :
     receiver  ( context, ZMQ_PULL ),
     sender    ( context, ZMQ_PUSH ),
     controller( context, ZMQ_SUB  ),
-    message   (                   ),
-    body_msg  (                   )
+    items     { {static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0}, {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0} }
 {
     receiver.connect(protocol1);
     sender.connect(protocol2);
     controller.connect("tcp://localhost:7777");
     controller.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-    items [0] = { static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0   };
-    items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
 int Module_Worker_1::Init()
@@ -41,15 +38,12 @@ Module_Worker_2::Module_Worker_2(const char *protocol1, const char *protocol2) :
     receiver  ( context, ZMQ_PULL ),
     sender    ( context, ZMQ_PUSH ),
     controller( context, ZMQ_SUB  ),
-    message   (                   ),
-    body_msg  (                   )
+    items     { {static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0}, {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0} }
 {
     receiver.bind(protocol1);
     sender.bind(protocol2);
     controller.connect("tcp://localhost:7777");
     controller.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-    items [0] = { static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0   };
-    items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
 int Module_Worker_2::Init()
@@ -73,8 +67,7 @@ Module_Sink_1::Module_Sink_1(const char *protocol):
     sender_cl ( context, ZMQ_PUSH ),
     controller( context, ZMQ_PUB  ),
     timer     ( context, ZMQ_PULL ),
-    message   (                   ),
-    body_msg  (                   ),
+    items     {{static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0}, {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0}},
     tstart    (                   )
 {
     receiver.bind(protocol);
@@ -85,15 +78,12 @@ Module_Sink_1::Module_Sink_1(const char *protocol):
     (void)s_recv (timer);
     // Start our clock now
     gettimeofday (&tstart, nullptr);
-    // Process messages from receiver and controller
-    items [0] = { static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0   };
-    items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
 Module_Sink_1::~Module_Sink_1()
 {
     // Calculate and report duration of batch
-    struct timeval tend, tdiff;
+    struct timeval tend{}, tdiff{};
     gettimeofday (&tend, nullptr);
 
     if (tend.tv_usec < tstart.tv_usec) {
@@ -133,8 +123,7 @@ Module_Sink_2::Module_Sink_2(const char *protocol) :
     sender_cl ( context, ZMQ_PUSH ),
     controller( context, ZMQ_PUB  ),
     timer     ( context, ZMQ_PULL ),
-    message   (                   ),
-    body_msg  (                   ),
+    items     {{static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0}, {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0}},
     tstart    (                   )
 {
     receiver.connect(protocol);
@@ -145,15 +134,12 @@ Module_Sink_2::Module_Sink_2(const char *protocol) :
     (void)s_recv (timer);
     // Start our clock now
     gettimeofday (&tstart, nullptr);
-    // Process messages from receiver and controller
-    items [0] = { static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0   };
-    items [1] = { static_cast<void *>(controller), 0, ZMQ_POLLIN, 0 };
 }
 
 Module_Sink_2::~Module_Sink_2()
 {
     // Calculate and report duration of batch
-    struct timeval tend, tdiff;
+    struct timeval tend{}, tdiff{};
     gettimeofday (&tend, nullptr);
 
     if (tend.tv_usec < tstart.tv_usec) {
