@@ -46,7 +46,7 @@ int Worker2::process()
             spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
 
             //Get properties (name, value)
-            const size_t n = 4;
+            constexpr size_t n = 4;
             std::vector<std::string> property;
             FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
             for(size_t e = 0 ; e < n ; e+=2)
