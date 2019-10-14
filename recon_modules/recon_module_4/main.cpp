@@ -6,19 +6,17 @@
  * Version: 0.0.1
  *****************************************************************************/
 
-#include "worker4.h"
 #include <spdlog/spdlog.h>
+#include "worker4.h"
 
-int main (int argc, char *argv[])
-{
-    if (argc < 2)
-    {
-        spdlog::error("Usage: {} input_port", argv[0]);
-        return EXIT_FAILURE;
-    }
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    spdlog::error("Usage: {} input_port", argv[0]);
+    return EXIT_FAILURE;
+  }
 
-    FleXRP::Worker4 s(argv[1]);
-    s.process();
+  FleXRP::Worker4 s(argv[1]);
+  s.process();
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

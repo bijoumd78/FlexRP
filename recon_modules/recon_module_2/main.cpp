@@ -6,19 +6,17 @@
  * Version: 0.0.1
  *****************************************************************************/
 
-#include "worker2.h"
 #include <spdlog/spdlog.h>
+#include "worker2.h"
 
-int main (int argc, char *argv[])
-{
-    if (argc < 3)
-    {
-        spdlog::error("Usage: {} input_port output_port", argv[0]);
-        return EXIT_FAILURE;
-    }
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    spdlog::error("Usage: {} input_port output_port", argv[0]);
+    return EXIT_FAILURE;
+  }
 
-    FleXRP::Worker2 w(argv[1], argv[2]);
-    w.process();
+  FleXRP::Worker2 w(argv[1], argv[2]);
+  w.process();
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

@@ -3,15 +3,14 @@
 
 #include "Base_Modules.h"
 
-namespace FleXRP{
+namespace FleXRP {
 
-class Worker6 final : public Module_Worker_2
-{
-public:
-    Worker6(const char *protocol1, const char *protocol2);
-    int process() override;
+class Worker6 final : public Module_Worker_2 {
+ public:
+  Worker6(const char *protocol1, const char *protocol2);
+  int process() override;
 };
 
-}
+}  // namespace FleXRP
 
-#endif // WORKER2_H
+#endif  // WORKER2_H

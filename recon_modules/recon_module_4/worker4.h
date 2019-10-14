@@ -5,13 +5,12 @@
 
 namespace FleXRP {
 
-class Worker4 final : public Module_Sink_1
-{
-public:
-    explicit Worker4(const char *protocol);
-    int process() override;
+class Worker4 final : public Module_Sink_1 {
+ public:
+  explicit Worker4(const char *protocol);
+  int process() override;
 };
 
-}
+}  // namespace FleXRP
 
-#endif // WORKER2_H
+#endif  // WORKER2_H
