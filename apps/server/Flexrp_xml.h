@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace FLEXRP {
+namespace FlexRP {
 struct Readers {
   std::string name;
 };

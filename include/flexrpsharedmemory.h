@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace FlEXRP {
+namespace FlexRP {
 
 struct FlexRPSharedMemory {
   static void createSharedMemory(const std::vector<std::string> &v);
@@ -13,5 +13,5 @@ struct FlexRPSharedMemory {
   static bool to_bool(std::string &str);
 };
 
-}  // namespace FlEXRP
+}  // namespace FlexRP
 #endif  // FLEXRPSHAREDMEMORY_H

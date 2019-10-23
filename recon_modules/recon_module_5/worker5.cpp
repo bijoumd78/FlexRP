@@ -6,11 +6,11 @@
 #include <spdlog/spdlog.h>
 #include "zhelpers.hpp"
 
-namespace FleXRP {
+namespace FlexRP {
 
 Worker5::Worker5(const char *protocol) : Module_Sink_2(protocol) {}
 
-int FleXRP::Worker5::process() {
+int FlexRP::Worker5::process() {
   zmq::poll(&items[0], 2, -1);
 
   if (items[0].revents & ZMQ_POLLIN) {

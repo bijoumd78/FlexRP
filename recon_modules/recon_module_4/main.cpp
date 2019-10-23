@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     return EXIT_FAILURE;
   }
 
-  FleXRP::Worker4 s(argv[1]);
+  FlexRP::Worker4 s(argv[1]);
   s.process();
 
   return EXIT_SUCCESS;

@@ -4,7 +4,7 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <zmq.hpp>
 
-namespace FleXRP {
+namespace FlexRP {
 
 class Module_Worker_1 {
  public:

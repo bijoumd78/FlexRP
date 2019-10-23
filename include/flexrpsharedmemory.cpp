@@ -5,7 +5,7 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/lockfree/spsc_queue.hpp>  // ring buffer
 
-namespace FlEXRP {
+namespace FlexRP {
 
 namespace bip = boost::interprocess;
 using char_alloc =
@@ -52,4 +52,4 @@ bool FlexRPSharedMemory::to_bool(std::string &str) {
   return b;
 }
 
-}  // namespace FlEXRP
+}  // namespace FlexRP

@@ -6,7 +6,7 @@
 #include <spdlog/spdlog.h>
 #include "zhelpers.hpp"
 
-namespace FleXRP {
+namespace FlexRP {
 
 Worker1::Worker1(const char *protocol1, const char *protocol2)
     : Module_Worker_1(protocol1, protocol2) {}

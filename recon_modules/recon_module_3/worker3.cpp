@@ -7,12 +7,12 @@
 #include "flexrpsharedmemory.h"
 #include "zhelpers.hpp"
 
-namespace FleXRP {
+namespace FlexRP {
 
 Worker3::Worker3(const char *protocol1, const char *protocol2)
     : Module_Worker_1(protocol1, protocol2) {}
 
-int FleXRP::Worker3::process() {
+int FlexRP::Worker3::process() {
   //  Process messages from both sockets
   while (true) {
     zmq::poll(&items[0], 2, -1);
@@ -42,7 +42,7 @@ int FleXRP::Worker3::process() {
       // Get properties (name, value)
       constexpr size_t n = 4;
       std::vector<std::string> property;
-      FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
+      FlexRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
       for (size_t e = 0; e < n; e += 2) {
         spdlog::info("Property(name, value)  {} : {}", property[e],
                      property[e + 1]);

@@ -4,7 +4,7 @@
 
 int main() {
   spdlog::info("Flex Recon Pipeline started...");
-  using namespace FLEXRP;
+  using namespace FlexRP;
   while (true) {
     Flexrp_configuration fcg;
     try {

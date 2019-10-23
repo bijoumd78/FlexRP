@@ -13,7 +13,7 @@
 #include "flexrpsharedmemory.h"
 #include "pugixml.hpp"
 
-namespace FLEXRP {
+namespace FlexRP {
 
 Session::Session(TcpSocket t_socket)
     : m_socket(std::move(t_socket)),
@@ -260,7 +260,7 @@ void run_processes(const Flexrp_configuration &fcg) {
                       }
 
                       // Fill the shared memory
-                      FlEXRP::FlexRPSharedMemory::createSharedMemory(v);
+                      FlexRP::FlexRPSharedMemory::createSharedMemory(v);
                     }
 
                     bp::spawn(exec, arg1, arg2, g);

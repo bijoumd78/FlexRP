@@ -7,7 +7,7 @@
 #include "flexrpsharedmemory.h"
 #include "zhelpers.hpp"
 
-namespace FleXRP {
+namespace FlexRP {
 
 Worker2::Worker2(const char *protocol1, const char *protocol2)
     : Module_Worker_2(protocol1, protocol2) {}
@@ -42,7 +42,7 @@ int Worker2::process() {
       // Get properties (name, value)
       constexpr size_t n = 4;
       std::vector<std::string> property;
-      FlEXRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
+      FlexRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
       for (size_t e = 0; e < n; e += 2)
         spdlog::info("Property(name, value)  {} : {}", property[e],
                      property[e + 1]);

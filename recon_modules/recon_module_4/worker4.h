@@ -3,7 +3,7 @@
 
 #include "Base_Modules.h"
 
-namespace FleXRP {
+namespace FlexRP {
 
 class Worker4 final : public Module_Sink_1 {
  public:
