@@ -1,4 +1,4 @@
-<map id="/home/mahamadou/Desktop/FlexRP/recon_modules/recon_module_4/worker4.h" name="/home/mahamadou/Desktop/FlexRP/recon_modules/recon_module_4/worker4.h">
-<area shape="rect" id="node2" href="$recon__module__4_2main_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_4/main.cpp" alt="" coords="5,109,192,165"/>
-<area shape="rect" id="node3" href="$worker4_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_4/worker4.cpp" alt="" coords="217,109,413,165"/>
+<map id="worker4.h" name="worker4.h">
+<area shape="rect" id="node2" href="$recon__module__4_2main_8cpp.html" title="main.cpp" alt="" coords="5,80,80,107"/>
+<area shape="rect" id="node3" href="$worker4_8cpp.html" title="worker4.cpp" alt="" coords="104,80,197,107"/>
 </map>

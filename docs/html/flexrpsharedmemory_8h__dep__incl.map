@@ -1,8 +1,8 @@
-<map id="/home/mahamadou/Desktop/FlexRP/include/flexrpsharedmemory.h" name="/home/mahamadou/Desktop/FlexRP/include/flexrpsharedmemory.h">
-<area shape="rect" id="node2" href="$worker2_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_2/worker2.cpp" alt="" coords="5,95,201,151"/>
-<area shape="rect" id="node3" href="$worker3_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_3/worker3.cpp" alt="" coords="225,95,421,151"/>
-<area shape="rect" id="node4" href="$worker6_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_6/worker6.cpp" alt="" coords="445,95,641,151"/>
-<area shape="rect" id="node5" href="$worker7_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/recon_modules\l/recon_module_7/worker7.cpp" alt="" coords="665,95,861,151"/>
-<area shape="rect" id="node6" href="$flexrpsharedmemory_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/include/flexrpsharedmemory.cpp" alt="" coords="885,102,1148,143"/>
-<area shape="rect" id="node7" href="$test__FlexRPSharedMemory_8cpp.html" title="/home/mahamadou/Desktop\l/FlexRP/test/test_FlexRPShared\lMemory.cpp" alt="" coords="1172,95,1387,151"/>
+<map id="flexrpsharedmemory.h" name="flexrpsharedmemory.h">
+<area shape="rect" id="node2" href="$worker2_8cpp.html" title="worker2.cpp" alt="" coords="5,80,99,107"/>
+<area shape="rect" id="node3" href="$worker3_8cpp.html" title="worker3.cpp" alt="" coords="123,80,216,107"/>
+<area shape="rect" id="node4" href="$worker6_8cpp.html" title="worker6.cpp" alt="" coords="240,80,333,107"/>
+<area shape="rect" id="node5" href="$worker7_8cpp.html" title="worker7.cpp" alt="" coords="357,80,451,107"/>
+<area shape="rect" id="node6" href="$flexrpsharedmemory_8cpp.html" title="flexrpsharedmemory.cpp" alt="" coords="475,80,640,107"/>
+<area shape="rect" id="node7" href="$test__FlexRPSharedMemory_8cpp.html" title="test_FlexRPSharedMemory.cpp" alt="" coords="664,80,872,107"/>
 </map>
