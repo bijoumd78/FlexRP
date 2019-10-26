@@ -1,4 +1,12 @@
 # FlexRP #
+
+<!-- Doxygen Table of Contents -->
+[TOC]
+
+| Build Status |                                                                                |
+|--------------|--------------------------------------------------------------------------------|
+| Travis       | [![Travis Build Status][travis-build-status-svg]][travis-build-status]         |
+
 FlexRP is a general-purpose data streaming framework. The primary intent is to enable flexible and scalable image reconstruction using the pipeline architecture where each reconstruction step can be modularized and run on its own process. This software is a Work In Progress (WIP) and it is intended for research use only (See License for details).
 
 ## Quick Start with Docker ##
