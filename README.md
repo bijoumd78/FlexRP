@@ -1,5 +1,5 @@
 # FlexRP #
-
+==========
 <!-- Doxygen Table of Contents -->
 [TOC]
 
@@ -11,7 +11,7 @@ FlexRP is a general-purpose data streaming framework. The primary intent is to e
 
 
 ## Quick Start with Docker ##
-
+=============================
 
 The easiest way to install and to run FlexRP framework is to download one of the pre-built and tested Docker images:
 
@@ -25,7 +25,7 @@ The client can be launched with the following provided test data "data.h5" and o
 
 
 ## Prerequisites ##
-
+===================
 
  - C++11 or higher 
  - Boost
@@ -40,7 +40,7 @@ The client can be launched with the following provided test data "data.h5" and o
 
 
 ## Build and Install FlexRP ##
-
+==============================
 
 Copy and paste the following commands:
 
