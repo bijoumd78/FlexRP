@@ -148,7 +148,6 @@ s_dump (zmq::socket_t & socket)
     }
 }
 
-
 #if (!defined (WIN32))
 //  Set simple random printable identity on socket
 //  Caution:
