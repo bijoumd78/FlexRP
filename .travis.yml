@@ -2,14 +2,18 @@
 # Configuration
 #
 language: cpp
-dist: disco
+dist: bionic
+sudo: true
+
 
 #
-# Tokens
+# Install tools and libraries required for the project
 #
-env:
-  global:
-    secure: 
+script:
+ - sudo apt-get update --quiet &&\
+    apt-get install --no-install-recommends --no-install-suggests --yes  \
+    software-properties-common apt-utils wget build-essential libboost-all-dev libhdf5-serial-dev libfftw3-dev libpugixml-dev libzmq3-dev
+
 
 #
 # Build Dependencies
@@ -29,7 +33,7 @@ before_script:
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       mkdir -p external/cmake
       pushd external/cmake
-      wget https://cmake.org/files/v3.8/cmake-3.8.0-Linux-x86_64.sh
+      wget https://cmake.org/files/v3.12/cmake-3.12.4-Linux-x86_64.sh
       chmod +x cmake-*-Linux-x86_64.sh
       ./cmake-*-Linux-x86_64.sh --exclude-subdir --skip-license
       export PATH="${PWD}/bin:$PATH"
@@ -39,32 +43,39 @@ before_script:
     fi
 
 #
+# Install ISMRMRD
+#
+script:
+- mkdir /opt/code &&\
+    cd /opt/code && \
+    git clone https://github.com/ismrmrd/ismrmrd.git && \
+    cd ismrmrd && \
+    mkdir build && \
+    cd build && \
+    cmake ../ && \
+    make && \
+    make install
+
+#
+# Install spdlog
+#
+script:
+ - cd /opt/code && \
+    git clone https://github.com/gabime/spdlog.git && \
+    cd spdlog && \
+    mkdir build && \
+    cd build && \
+    cmake ../ && \
+    make && \
+    make install
+
+#
 # Build Matrix
 #
 matrix:
   include:
 
-  #
-  # Doxygen
-  #
-  - os: linux
-    env:
-      - TEST="Doxygen"
-    addons:
-      apt:
-        packages:
-          - doxygen
-    script:
-      - cd ..
-      - doxygen .doxygen.txt
-      - |
-        if [[ -s doxygen_warnings.txt ]]; then
-          echo "You must fix doxygen before submitting a pull request"
-          echo ""
-          cat doxygen_warnings.txt
-          exit -1
-        fi
-
+ 
   #
   # Git Check
   #
@@ -90,14 +101,14 @@ matrix:
       apt:
         sources:
           - ubuntu-toolchain-r-test
-          - llvm-toolchain-disco-4.0
+          - llvm-toolchain-bionic-7.0
         packages:
-          - clang-4.0
-          - clang-format-4.0
-          - gcc-6
-          - g++-6
+          - clang-7.0
+          - clang-format-7.0
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_CLANG_FORMAT=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make format > output.txt
       - |
@@ -120,14 +131,14 @@ matrix:
       apt:
         sources:
           - ubuntu-toolchain-r-test
-          - llvm-toolchain-disco-4.0
+          - llvm-toolchain-bionic-7.0
         packages:
-          - clang-4.0
-          - clang-tidy-4.0
-          - gcc-6
-          - g++-6
+          - clang-7.0
+          - clang-tidy-7.0
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make tidy > output.txt
       - |
@@ -151,10 +162,10 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DENABLE_CPPCHECK=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_CPPCHECK=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make check
 
@@ -169,12 +180,12 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
     env:
       - TEST="Google Address Sanitizer"
     script:
-      - cmake -DENABLE_ASAN=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_ASAN=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make test
 
@@ -189,10 +200,10 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DENABLE_USAN=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_USAN=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make test
 
@@ -207,10 +218,10 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DENABLE_TSAN=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DENABLE_TSAN=ON -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make test
 
@@ -225,51 +236,51 @@ matrix:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
           - valgrind
     script:
-      - cmake -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - ctest -T memcheck
 
 
   #
-  # G++ 6
+  # G++ 7
   #
   - os: linux
     env:
-      - TEST="G++ 6"
+      - TEST="G++ 7"
     addons:
       apt:
         sources:
           - ubuntu-toolchain-r-test
         packages:
-          - gcc-6
-          - g++-6
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DCMAKE_CXX_COMPILER="g++-6" ..
+      - cmake -DCMAKE_CXX_COMPILER="g++-7" ..
       - make
       - make test
 
   
   #
-  # Clang 4.0
+  # Clang 7.0
   #
   - os: linux
     env:
-      - TEST="Clang 4.0"
+      - TEST="Clang 7.0"
     addons:
       apt:
         sources:
           - ubuntu-toolchain-r-test
-          - llvm-toolchain-trusty-4.0
+          - llvm-toolchain-bionic-7.0
         packages:
-          - clang-4.0
-          - gcc-6
-          - g++-6
+          - clang-7.0
+          - gcc-7
+          - g++-7
     script:
-      - cmake -DCMAKE_C_COMPILER=clang-4.0 -DCMAKE_CXX_COMPILER=clang++-4.0 ..
+      - cmake -DCMAKE_C_COMPILER=clang-7.0 -DCMAKE_CXX_COMPILER=clang++-7 ..
       - make
       - make test
 
