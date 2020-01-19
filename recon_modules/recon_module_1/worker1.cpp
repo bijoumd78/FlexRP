@@ -5,6 +5,7 @@
 #include <ismrmrd/xml.h>
 #include <spdlog/spdlog.h>
 #include "zhelpers.hpp"
+#include "ThreadPool.h"
 
 namespace FlexRP {
 

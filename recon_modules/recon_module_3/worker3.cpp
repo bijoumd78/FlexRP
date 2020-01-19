@@ -6,6 +6,7 @@
 #include <spdlog/spdlog.h>
 #include "flexrpsharedmemory.h"
 #include "zhelpers.hpp"
+#include "ThreadPool.h"
 
 namespace FlexRP {
 
