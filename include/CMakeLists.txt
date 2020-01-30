@@ -1,6 +1,8 @@
 set(SRC
     flexrpsharedmemory.h
     flexrpsharedmemory.cpp
+    ThreadPool.h
+    zhelpers.hpp
     )
 
 add_library(FlexSharedMemory ${SRC})
