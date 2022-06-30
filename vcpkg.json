@@ -1,0 +1,15 @@
+{
+  "name": "flex",
+  "version-string": "1.0.0",
+  "dependencies": [
+    "boost-system",
+    "boost-program-options",
+    "boost-filesystem",
+    "hdf5",
+    "fftw3",
+    "pugixml",
+    "cppzmq",
+    "spdlog",
+    "ismrmrd"
+  ]
+}

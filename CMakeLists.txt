@@ -1,16 +1,20 @@
-cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project(FlexRP LANGUAGES CXX C VERSION 1.0.0)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+endif()
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+if(UNIX)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+endif()
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
@@ -44,33 +48,28 @@ endforeach()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include_directories(./include)
-include_directories(/usr/include/hdf5/serial)
 
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_LIBS    OFF)
+set(Boost_USE_MULTITHREADED  ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-# necessary for Windows and RHEL <=6 systems
-set(Boost_NO_BOOST_CMAKE ON)
+
 
 if(WIN32)
-    add_definitions( -DBOOST_ALL_NO_LIB )
-    add_definitions( -DBOOST_ALL_DYN_LINK )
-    add_definitions( -DBOOST_NO_EXCEPTIONS )
+    add_definitions( -D_WIN32_WINNT=0x0601 )
 endif()
 
 # We actually only use system and thread explicitly, but they require linking in date_time and chrono
 if (WIN32)
-    find_package(Boost 1.65.0 COMPONENTS system thread date_time chrono program_options filesystem timer REQUIRED)
+    find_package(Boost 1.79.0 COMPONENTS system program_options filesystem REQUIRED)
 else()
-    find_package(Boost 1.65.0 COMPONENTS system thread program_options filesystem timer REQUIRED)
+    find_package(Boost 1.79.0 COMPONENTS system program_options filesystem REQUIRED)
 endif()
 
-find_package(spdlog REQUIRED)
-find_package(ZeroMQ REQUIRED)
-find_package(HDF5 1.8 COMPONENTS C CXX HL REQUIRED)
-find_package(FFTW3 COMPONENTS single double REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(CPPZMQ CONFIG REQUIRED)
+find_package(HDF5 REQUIRED)
+find_package(FFTW3 CONFIG REQUIRED)
 find_package(ISMRMRD REQUIRED)
-link_directories(${ISMRMRD_LIBRARY_DIRS})
 
 add_subdirectory(include)
 add_subdirectory(apps)
@@ -98,7 +97,9 @@ include(${CMAKE_SOURCE_DIR}/cmake/cppcheck.cmake)
 
 # Enable all warnings except for no-sign-compare, which Clang disables
 # by default.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare")
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare")
+endif()
 
 option(WERROR "Turn warnings into errors" OFF)
 if (WERROR)

@@ -7,6 +7,7 @@
  *****************************************************************************/
 
 #include <spdlog/spdlog.h>
+#include <stdlib.h>
 #include "worker6.h"
 
 int main(int argc, char *argv[]) {

@@ -20,6 +20,8 @@
 #if (!defined(WIN32))
 #   include <sys/time.h>
 #   include <unistd.h>
+# else
+#include <windows.h>
 #endif
 
 //  Bring Windows MSVC up to C99 scratch

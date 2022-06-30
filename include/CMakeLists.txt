@@ -1,12 +1,17 @@
 set(SRC
-    flexrpsharedmemory.h
     flexrpsharedmemory.cpp
+    flexrpsharedmemory.h
     ThreadPool.h
     zhelpers.hpp
     )
 
 add_library(FlexSharedMemory ${SRC})
-target_link_libraries(FlexSharedMemory ${Boost_LIBRARIES} pthread rt)
+target_include_directories(FlexSharedMemory PRIVATE ${Boost_INCLUDE_DIRS})
+if(UNIX)
+    target_link_libraries(FlexSharedMemory PRIVATE ${Boost_LIBRARIES} pthread rt)
+else()
+    target_link_libraries(FlexSharedMemory PRIVATE ${Boost_LIBRARIES})
+endif()
 
 install(
     TARGETS

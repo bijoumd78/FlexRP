@@ -6,10 +6,10 @@ set( SRC
     )
 
 add_library(worker6_lib ${SRC})
-target_link_libraries(worker6_lib PRIVATE Base_Modules spdlog::spdlog FlexSharedMemory)
+target_link_libraries(worker6_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules spdlog::spdlog FlexSharedMemory )
 
 add_executable(worker6 main.cpp)
-target_link_libraries(worker6 PRIVATE worker6_lib)
+target_link_libraries(worker6 PUBLIC worker6_lib)
 
 #install
 install (TARGETS

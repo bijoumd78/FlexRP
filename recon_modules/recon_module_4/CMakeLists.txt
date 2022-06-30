@@ -6,10 +6,10 @@ set( SRC
     )
 
 add_library(worker4_lib ${SRC})
-target_link_libraries(worker4_lib PRIVATE Base_Modules spdlog::spdlog)
+target_link_libraries(worker4_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules spdlog::spdlog )
 
 add_executable(consumer main.cpp)
-target_link_libraries(consumer PRIVATE worker4_lib)
+target_link_libraries(consumer PUBLIC worker4_lib)
 
 #install
 install (TARGETS

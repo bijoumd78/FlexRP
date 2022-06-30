@@ -3,6 +3,9 @@
 
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <zmq.hpp>
+#if(WIN32)
+#include <winsock.h>
+#endif
 
 namespace FlexRP {
 

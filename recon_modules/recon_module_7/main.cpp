@@ -6,8 +6,10 @@
  * Version: 0.0.1
  *****************************************************************************/
 
-#include <spdlog/spdlog.h>
 #include "worker7.h"
+#include <stdlib.h>
+#include <spdlog/spdlog.h>
+
 
 int main(int argc, char *argv[]) {
   if (argc < 3) {

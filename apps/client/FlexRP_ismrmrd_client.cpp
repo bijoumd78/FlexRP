@@ -11,7 +11,9 @@
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
 #include <spdlog/spdlog.h>
+#if !defined (WIN32)
 #include <unistd.h>
+#endif
 #include <boost/asio/io_service.hpp>
 #include <boost/program_options.hpp>
 #include <cstdio>

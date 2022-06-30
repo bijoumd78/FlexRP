@@ -1,8 +1,24 @@
 #include "Base_Modules.h"
 #include <spdlog/spdlog.h>
+#if defined(_WIN32)
+#include <chrono>
+#endif
 #include "zhelpers.hpp"
 
 namespace FlexRP {
+
+#if defined(_WIN32)
+int gettimeofday(struct timeval *tp, struct timezone *tzp)
+{
+   namespace sc                 = std::chrono;
+   sc::system_clock::duration d = sc::system_clock::now().time_since_epoch();
+   sc::seconds s                = sc::duration_cast<sc::seconds>(d);
+   tp->tv_sec                   = s.count();
+   tp->tv_usec                  = sc::duration_cast<sc::microseconds>(d - s).count();
+
+   return 0;
+}
+#endif // _WIN32
 
 Module_Worker_1::Module_Worker_1(const char *protocol1, const char *protocol2)
     : context(1),

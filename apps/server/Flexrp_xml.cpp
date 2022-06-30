@@ -33,7 +33,7 @@ void Session::doRead() {
 }
 
 void Session::processRead(size_t t_bytesTransferred) {
-  spdlog::info("{}({}), in_avail = {}, size = {}, max_size = {}.", __FUNCTION__,
+    spdlog::info("{}({}), in_avail = {}, size = {}, max_size = {}.", __FUNCTION__,
                t_bytesTransferred, m_requestBuf_.in_avail(),
                m_requestBuf_.size(), m_requestBuf_.max_size());
 
@@ -103,7 +103,7 @@ void Session::doReadFileContent(size_t t_bytesTransferred) {
 
 void Session::handleError(std::string const &t_functionName,
                           boost::system::error_code const &t_ec) {
-  spdlog::info("{} in {} due to {}", __FUNCTION__, t_functionName,
+   spdlog::info("{} in {} due to {}", __FUNCTION__, t_functionName,
                t_ec.message());
 }
 
@@ -229,7 +229,7 @@ void run_processes(const Flexrp_configuration &fcg) {
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
-          spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2);
+          spdlog::debug("{} {} {}", exec.string(), arg1, arg2);
 
           bp::spawn(exec, arg1, arg2, g);
           ++count;
@@ -247,10 +247,10 @@ void run_processes(const Flexrp_configuration &fcg) {
                             ? connect_port + std::to_string(5 + count + 1)
                             : bind_port + std::to_string(5 + count + 1);
 
-                    spdlog::debug("{} {} {}", exec.c_str(), arg1, arg2);
+                    spdlog::debug("{} {} {}", exec.string(), arg1, arg2);
 
                     if (!rc.properties.empty()) {
-                      // spdlog::info("{}", rc.name.data());
+                      spdlog::info("{}", rc.name.data());
                       std::vector<std::string> v;
 
                       for (auto e : rc.properties) {
@@ -278,7 +278,7 @@ void run_processes(const Flexrp_configuration &fcg) {
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
-          spdlog::debug("{} {}", exec.c_str(), arg1);
+          spdlog::debug("{} {}", exec.string(), arg1);
 
           bp::spawn(exec, arg1, g);
           // ++count;
