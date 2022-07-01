@@ -13,6 +13,8 @@ else()
     target_link_libraries(FlexSharedMemory PRIVATE ${Boost_LIBRARIES})
 endif()
 
+set_target_properties(FlexSharedMemory PROPERTIES FOLDER "include")
+
 install(
     TARGETS
     FlexSharedMemory

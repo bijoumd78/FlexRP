@@ -22,6 +22,8 @@ endif()
 
 message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 include(GNUInstallDirs)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -74,21 +76,13 @@ find_package(ISMRMRD REQUIRED)
 add_subdirectory(include)
 add_subdirectory(apps)
 add_subdirectory(recon_modules)
-include_directories(test)
 
 # Testing code
 include(CTest)
 enable_testing()
 
 if(BUILD_TESTING)
-    add_executable(test_FlexRPSharedMemory ${CMAKE_CURRENT_LIST_DIR}/test/test_FlexRPSharedMemory.cpp)
-    target_link_libraries(test_FlexRPSharedMemory FlexSharedMemory)
-
-    # Define test
-    add_test(
-        NAME FLexRPSharedMemory_test
-        COMMAND $<TARGET_FILE:test_FlexRPSharedMemory> --success
-        )
+    add_subdirectory(test)
 endif(BUILD_TESTING)
 
 # Include extra CMake files for static and dynamic analyzers

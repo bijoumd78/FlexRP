@@ -7,9 +7,11 @@ set( SRC
 
 add_library(worker6_lib ${SRC})
 target_link_libraries(worker6_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules spdlog::spdlog FlexSharedMemory )
+set_target_properties(worker6_lib PROPERTIES FOLDER "recon_module_6")
 
 add_executable(worker6 main.cpp)
 target_link_libraries(worker6 PUBLIC worker6_lib)
+set_target_properties(worker6 PROPERTIES FOLDER "recon_module_6")
 
 #install
 install (TARGETS

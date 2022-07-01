@@ -7,9 +7,11 @@ set( SRC
 
 add_library(worker4_lib ${SRC})
 target_link_libraries(worker4_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules spdlog::spdlog )
+set_target_properties(worker4_lib PROPERTIES FOLDER "recon_module_4")
 
 add_executable(consumer main.cpp)
 target_link_libraries(consumer PUBLIC worker4_lib)
+set_target_properties(consumer PROPERTIES FOLDER "recon_module_4")
 
 #install
 install (TARGETS

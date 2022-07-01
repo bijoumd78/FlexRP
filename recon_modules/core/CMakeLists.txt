@@ -7,6 +7,8 @@ add_library(Base_Modules ${SRC})
 target_include_directories(Base_Modules PUBLIC ${ZeroMQ_INCLUDE_DIRS})
 target_link_libraries(Base_Modules PUBLIC ${ZeroMQ_LIBRARIES} spdlog::spdlog)
 
+set_target_properties(Base_Modules PROPERTIES FOLDER "core")
+
 install(TARGETS
     Base_Modules
     ARCHIVE
