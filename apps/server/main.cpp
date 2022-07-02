@@ -1,6 +1,6 @@
+#include "Flexrp_xml.h"
 #include <spdlog/spdlog.h>
 #include <exception>
-#include "Flexrp_xml.h"
 
 int main() {
   spdlog::info("Flex Recon Pipeline started...");
@@ -10,7 +10,7 @@ int main() {
     try {
       deserialize(fcg);
       run_processes(fcg);
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
       spdlog::error("Exception: {}", e.what());
     }
   }

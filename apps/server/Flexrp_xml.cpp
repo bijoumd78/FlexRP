@@ -1,4 +1,6 @@
 #include "Flexrp_xml.h"
+#include "flexrpsharedmemory.h"
+#include "pugixml.hpp"
 #include <spdlog/spdlog.h>
 #include <algorithm>
 #include <boost/asio/read_until.hpp>
@@ -10,15 +12,15 @@
 #include <boost/unordered_map.hpp>
 #include <functional>
 #include <stdexcept>
-#include "flexrpsharedmemory.h"
-#include "pugixml.hpp"
+
 
 namespace FlexRP {
 
 Session::Session(TcpSocket t_socket)
+    
+    
     : m_socket(std::move(t_socket)),
       m_fileSize(0)
-
 {}
 
 void Session::doRead() {
@@ -137,7 +139,7 @@ void Server::createWorkDirectory() {
 
 void deserialize(Flexrp_configuration &fcg) {
   // Read and write from the stream the config file
-  const std::string config_path{"/tmp/config"};
+  const std::string config_path{"./config"};
 
   // Read the config file
   try {
@@ -147,15 +149,16 @@ void deserialize(Flexrp_configuration &fcg) {
 
     ioService.run();
 
-  } catch (std::exception &e) {
+  } catch (const std::exception &e) {
     spdlog::error("Exception: {}", e.what());
   }
 
   // Rebuild the full path
-  const std::string full_path{config_path + "/" + config_filename};
+  const auto full_path{
+      boost::filesystem::current_path().append("/" + config_filename)};
 
   if (!boost::filesystem::exists(full_path)) {
-    spdlog::error("{} doesn't exist...", full_path.c_str());
+    spdlog::error("{} doesn't exist...", full_path.string());
     return;
   }
 
@@ -255,6 +258,7 @@ void run_processes(const Flexrp_configuration &fcg) {
 
                       for (auto e : rc.properties) {
                         spdlog::debug("{} : {}", e.name, e.value);
+
                         v.emplace_back(e.name);
                         v.emplace_back(e.value);
                       }
