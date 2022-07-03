@@ -31,8 +31,8 @@ int FlexRP::Worker7::process() {
 
       spdlog::info("I am worker 7");
 
-      spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
-                   h.userParameters->userParameterLong[0].value);
+      /* spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+                   h.userParameters->userParameterLong[0].value);*/
 
       //*** Message body
       receiver.recv(&body_msg);

@@ -75,11 +75,12 @@ class Server {
 
   TcpSocket m_socket;
   TcpAcceptor m_acceptor;
-
-  std::string m_workDirectory;
+  std::string m_configFileDir;
 };
 
-static std::string config_filename{};
+// TODO: This code needs to be refactored
+inline static std::string config_filename{};
+inline static const auto m_workDirectory{boost::filesystem::current_path()};
 void deserialize(Flexrp_configuration& fcg);
 void run_processes(const Flexrp_configuration& fcg);
 }  // namespace FLEXRP

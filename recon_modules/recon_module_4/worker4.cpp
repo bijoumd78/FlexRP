@@ -27,8 +27,8 @@ int FlexRP::Worker4::process() {
 
     spdlog::info("I am the last worker in the chain...");
 
-    spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
-                 h.userParameters->userParameterLong[0].value);
+    /* spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+                 h.userParameters->userParameterLong[0].value);*/
 
     //*** Message body
     receiver.recv(&body_msg);

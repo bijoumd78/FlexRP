@@ -31,8 +31,8 @@ int Worker2::process() {
 
             spdlog::info("I am worker 2");
 
-            spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
-                    h.userParameters->userParameterLong[0].value);
+            /* spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+                    h.userParameters->userParameterLong[0].value);*/
 
             //*** Message body
             receiver.recv(&body_msg);
@@ -51,6 +51,7 @@ int Worker2::process() {
             //  Do the work
             // s_sleep(1000);
 
+#if 0
             //Spin couple threads (Sample multithreaded application)
             auto n_threads = std::thread::hardware_concurrency();
             spdlog::info("Total thread(s) available on this system is {}", n_threads);
@@ -71,7 +72,7 @@ int Worker2::process() {
 
             for(auto && result: results)
                 spdlog::info("{}", result.get());
-
+#endif
 
 
             sender.send(message);

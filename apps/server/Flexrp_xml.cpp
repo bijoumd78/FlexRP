@@ -12,6 +12,7 @@
 #include <boost/unordered_map.hpp>
 #include <functional>
 #include <stdexcept>
+#include <iostream>
 
 
 namespace FlexRP {
@@ -43,7 +44,9 @@ void Session::processRead(size_t t_bytesTransferred) {
   readData(requestStream);
 
   auto pos = m_fileName.find_last_of('\\');
-  if (pos != std::string::npos) m_fileName = m_fileName.substr(pos + 1);
+
+  if (pos != std::string::npos) 
+      m_fileName = m_fileName.substr(pos + 1);
 
   createFile();
 
@@ -115,9 +118,9 @@ Server::Server(IoService &t_ioService, short t_port,
       m_acceptor(t_ioService, boost::asio::ip::tcp::endpoint(
                                   boost::asio::ip::tcp::v4(),
                                   static_cast<unsigned short>(t_port))),
-      m_workDirectory(t_workDirectory) {
+     m_configFileDir(t_workDirectory)
+{
   createWorkDirectory();
-
   doAccept();
 }
 
@@ -131,9 +134,9 @@ void Server::doAccept() {
 
 void Server::createWorkDirectory() {
   using namespace boost::filesystem;
-  auto currentPath = path(m_workDirectory);
+   auto currentPath = path(m_configFileDir);
   if (!exists(currentPath) && !create_directory(currentPath))
-    spdlog::error("Coudn't create working directory: {}", m_workDirectory);
+      spdlog::error("Coudn't create working directory: {}", m_configFileDir);
   current_path(currentPath);
 }
 
@@ -154,8 +157,7 @@ void deserialize(Flexrp_configuration &fcg) {
   }
 
   // Rebuild the full path
-  const auto full_path{
-      boost::filesystem::current_path().append("/" + config_filename)};
+  const auto full_path{boost::filesystem::current_path().append("/" + config_filename)};
 
   if (!boost::filesystem::exists(full_path)) {
     spdlog::error("{} doesn't exist...", full_path.string());
@@ -221,10 +223,14 @@ void run_processes(const Flexrp_configuration &fcg) {
     const std::string bind_port{"tcp://*:555"};
     size_t count{};
 
+    // Get Server directory
+    std::vector<boost::filesystem::path> path{m_workDirectory};
+
     // Launch readers
     std::for_each(
         fcg.readers.cbegin(), fcg.readers.cend(), [&](const Readers &r) {
-          auto exec = bp::search_path(r.name.c_str());
+          
+          auto exec = bp::search_path(r.name.c_str(), path);
           auto arg1 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count)
                           : bind_port + std::to_string(5 + count);
@@ -241,7 +247,7 @@ void run_processes(const Flexrp_configuration &fcg) {
     // Launch the workers
     std::for_each(fcg.recon_modules.cbegin(), fcg.recon_modules.cend(),
                   [&](const Recon_modules &rc) {
-                    auto exec = bp::search_path(rc.name.c_str());
+                    auto exec = bp::search_path(rc.name.c_str(), path);
                     auto arg1 = (count + 1) % 2 == 1
                                     ? connect_port + std::to_string(5 + count)
                                     : bind_port + std::to_string(5 + count);
@@ -274,7 +280,7 @@ void run_processes(const Flexrp_configuration &fcg) {
     // Launch the writers
     std::for_each(
         fcg.writers.cbegin(), fcg.writers.cend(), [&](const Writers &w) {
-          auto exec = bp::search_path(w.name.c_str());
+          auto exec = bp::search_path(w.name.c_str(), path);
           auto arg1 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count)
                           : bind_port + std::to_string(5 + count);
@@ -290,7 +296,7 @@ void run_processes(const Flexrp_configuration &fcg) {
 
     g.wait();
 
-  } catch (std::exception &e) {
+  } catch (const std::exception &e) {
     spdlog::error("{}", e.what());
   }
 }

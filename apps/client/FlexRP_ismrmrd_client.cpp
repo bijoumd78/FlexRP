@@ -159,8 +159,8 @@ int main(int argc, char* argv[]) {
 
     spdlog::info("Received data from server...");
 
-    spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
-                 h.userParameters->userParameterLong[0].value);
+    /* spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+                 h.userParameters->userParameterLong[0].value);*/
 
     //*** Message body
     receiver_sr.recv(&body_msg);
