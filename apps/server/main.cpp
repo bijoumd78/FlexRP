@@ -3,7 +3,9 @@
 #include <exception>
 
 int main() {
-  spdlog::set_level(spdlog::level::debug); // Set global log level to debug
+  // Set global log level to debug
+  spdlog::set_level(spdlog::level::debug); 
+
   spdlog::info("Flex Recon Pipeline started...");
   using namespace FlexRP;
   while (true) {

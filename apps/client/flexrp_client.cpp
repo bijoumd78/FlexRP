@@ -13,9 +13,8 @@ Client::Client(IoService& t_ioService,
     : m_ioService(t_ioService),
       m_socket(t_ioService),
       m_endpointIterator(t_endpointIterator),
-      m_buf(),
+      m_buf{},
       m_path(t_path)
-
 {
   doConnect();
   openFile(m_path);

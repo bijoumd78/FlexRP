@@ -17,9 +17,8 @@
 namespace FlexRP {
 
 Session::Session(TcpSocket t_socket)
-    
-    
     : m_socket(std::move(t_socket)),
+      m_buf{},
       m_fileSize(0)
 {}
 
@@ -228,12 +227,11 @@ void run_processes(const Flexrp_configuration &fcg) {
     // Launch readers
     std::for_each(
         fcg.readers.cbegin(), fcg.readers.cend(), [&](const Readers &r) {
-          
           auto exec = bp::search_path(r.name.c_str(), path);
-          auto arg1 = (count + 1) % 2 == 1
+          auto &arg1 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count)
                           : bind_port + std::to_string(5 + count);
-          auto arg2 = (count + 1) % 2 == 1
+          auto &arg2 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
@@ -247,10 +245,10 @@ void run_processes(const Flexrp_configuration &fcg) {
     std::for_each(fcg.recon_modules.cbegin(), fcg.recon_modules.cend(),
                   [&](const Recon_modules &rc) {
                     auto exec = bp::search_path(rc.name.c_str(), path);
-                    auto arg1 = (count + 1) % 2 == 1
+                    auto &arg1 = (count + 1) % 2 == 1
                                     ? connect_port + std::to_string(5 + count)
                                     : bind_port + std::to_string(5 + count);
-                    auto arg2 =
+                    auto &arg2 =
                         (count + 1) % 2 == 1
                             ? connect_port + std::to_string(5 + count + 1)
                             : bind_port + std::to_string(5 + count + 1);
@@ -280,17 +278,16 @@ void run_processes(const Flexrp_configuration &fcg) {
     std::for_each(
         fcg.writers.cbegin(), fcg.writers.cend(), [&](const Writers &w) {
           auto exec = bp::search_path(w.name.c_str(), path);
-          auto arg1 = (count + 1) % 2 == 1
+          auto &arg1 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count)
                           : bind_port + std::to_string(5 + count);
-          auto arg2 = (count + 1) % 2 == 1
+          auto &arg2 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
           spdlog::debug("{} {}", exec.string(), arg1);
 
           bp::spawn(exec, arg1, g);
-          // ++count;
         });
 
     g.wait();

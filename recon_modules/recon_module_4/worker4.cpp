@@ -1,11 +1,11 @@
 #include "worker4.h"
+#include "zhelpers.hpp"
+#include "ThreadPool.h"
 #include <ismrmrd/dataset.h>
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
 #include <spdlog/spdlog.h>
-#include "zhelpers.hpp"
-#include "ThreadPool.h"
 
 namespace FlexRP {
 

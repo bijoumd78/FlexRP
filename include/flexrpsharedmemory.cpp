@@ -4,7 +4,6 @@
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/lockfree/spsc_queue.hpp>  // ring buffer
 #include <algorithm>
-#include <iostream>
 #include <sstream>
 
 namespace FlexRP {

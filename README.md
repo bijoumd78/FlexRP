@@ -21,12 +21,13 @@ The client can be launched with the following provided test data "data.h5" and o
 
 ## Prerequisites
 
- - C++11 or higher 
- - Boost
+ - C++17 or higher 
+ - Boost-program-options
+ - Boost-filesystem
  - hdf5
  - fftw3
  - pugixml
- - zmq
+ - cppzmq
  - spdlog
  - ISMRMRD
  - cmake
