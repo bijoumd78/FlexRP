@@ -7,7 +7,6 @@
 #include <ismrmrd/xml.h>
 #include <spdlog/spdlog.h>
 
-
 namespace FlexRP {
 
 Worker1::Worker1(const char *protocol1, const char *protocol2)
