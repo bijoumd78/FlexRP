@@ -67,9 +67,9 @@ endif()
 
 # We actually only use system and thread explicitly, but they require linking in date_time and chrono
 if (WIN32)
-    find_package(Boost 1.79.0 COMPONENTS program_options filesystem REQUIRED)
+    find_package(Boost COMPONENTS program_options filesystem REQUIRED)
 else()
-    find_package(Boost 1.79.0 COMPONENTS program_options filesystem REQUIRED)
+    find_package(Boost COMPONENTS program_options filesystem REQUIRED)
 endif()
 
 find_package(spdlog CONFIG REQUIRED)
