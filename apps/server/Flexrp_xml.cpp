@@ -70,7 +70,6 @@ void Session::readData(std::istream &stream) {
   stream >> m_fileName;
   stream >> m_fileSize;
   stream.read(m_buf.data(), 2);
-  //config_filename = m_fileName;
 
   spdlog::info("{} size is {}, tellg = {}", m_fileName, m_fileSize,
                stream.tellg());
@@ -99,7 +98,7 @@ void Session::doReadFileContent(size_t t_bytesTransferred) {
   auto self = shared_from_this();
   m_socket.async_read_some(
       boost::asio::buffer(m_buf.data(), m_buf.size()),
-      [this, self](boost::system::error_code /*ec*/, size_t bytes) {
+      [this, self](boost::system::error_code, size_t bytes) {
         doReadFileContent(bytes);
       });
 }
