@@ -70,7 +70,7 @@ void Session::readData(std::istream &stream) {
   stream >> m_fileName;
   stream >> m_fileSize;
   stream.read(m_buf.data(), 2);
-  config_filename = m_fileName;
+  //config_filename = m_fileName;
 
   spdlog::info("{} size is {}, tellg = {}", m_fileName, m_fileSize,
                stream.tellg());
@@ -138,24 +138,9 @@ void Server::createWorkDirectory() {
   current_path(currentPath);
 }
 
-void deserialize(Flexrp_configuration &fcg) {
-  // Read and write from the stream the config file
-  const std::string config_path{"./config"};
-
-  // Read the config file
-  try {
-    boost::asio::io_service ioService;
-
-    Server server(ioService, 8080, config_path);
-
-    ioService.run();
-
-  } catch (const std::exception &e) {
-    spdlog::error("Exception: {}", e.what());
-  }
-
+void Server::deserialize(Flexrp_configuration &fcg) {
   // Rebuild the full path
-  const auto full_path{boost::filesystem::current_path().append("/" + config_filename)};
+  const auto full_path{boost::filesystem::current_path().append("/" + Session::getFilename())};
 
   if (!boost::filesystem::exists(full_path)) {
     spdlog::error("{} doesn't exist...", full_path.string());
@@ -205,7 +190,7 @@ void deserialize(Flexrp_configuration &fcg) {
   }
 }
 
-void run_processes(const Flexrp_configuration &fcg) {
+void Server::run_processes(const Flexrp_configuration &fcg) {
   // Remove shared memory on construction and destruction
   namespace bip = boost::interprocess;
   struct shm_remove {
@@ -215,7 +200,7 @@ void run_processes(const Flexrp_configuration &fcg) {
 
   // Create a shared memory for the workers properties
   namespace bp = boost::process;
-  try {
+
     bp::group g;
     const std::string connect_port{"tcp://localhost:555"};
     const std::string bind_port{"tcp://*:555"};
@@ -291,10 +276,6 @@ void run_processes(const Flexrp_configuration &fcg) {
         });
 
     g.wait();
-
-  } catch (const std::exception &e) {
-    spdlog::error("{}", e.what());
-  }
 }
 
 }  // namespace FLEXRP

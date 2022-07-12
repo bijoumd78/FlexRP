@@ -42,6 +42,10 @@ class Session : public std::enable_shared_from_this<Session> {
 
   void start() { doRead(); }
 
+  static std::string getFilename() {
+      return m_fileName;
+  }
+
  private:
   void doRead();
   void processRead(size_t t_bytesTransferred);
@@ -57,7 +61,7 @@ class Session : public std::enable_shared_from_this<Session> {
   boost::asio::streambuf m_requestBuf_;
   std::ofstream m_outputFile;
   size_t m_fileSize;
-  std::string m_fileName;
+  inline static std::string m_fileName{};
 };
 
 class Server {
@@ -69,20 +73,22 @@ class Server {
   Server(IoService& t_ioService, short t_port,
          std::string const& t_workDirectory);
 
+  static void deserialize(Flexrp_configuration& fcg);
+  static void run_processes(const Flexrp_configuration& fcg);
+  static boost::filesystem::path getWorkingDirectory(){ return m_workDirectory; }
+
  private:
+  // Utility functions
   void doAccept();
   void createWorkDirectory();
 
   TcpSocket m_socket;
   TcpAcceptor m_acceptor;
   std::string m_configFileDir;
+  inline static std::string config_filename{};
+  inline static const auto m_workDirectory{boost::filesystem::current_path()};
 };
 
-// TODO: This code needs to be refactored
-inline static std::string config_filename{};
-inline static const auto m_workDirectory{boost::filesystem::current_path()};
-void deserialize(Flexrp_configuration& fcg);
-void run_processes(const Flexrp_configuration& fcg);
 }  // namespace FLEXRP
 
 #endif  // FLEXRP_XML_H

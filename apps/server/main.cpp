@@ -11,9 +11,17 @@ int main() {
   while (true) {
     Flexrp_configuration fcg;
     try {
-      deserialize(fcg);
-      run_processes(fcg);
-    } catch (const std::exception& e) {
+        // Read and write from the stream the config file
+       boost::filesystem::current_path(Server::getWorkingDirectory());
+       const std::string config_path{"./config"};
+       boost::asio::io_service ioService;
+       Server server(ioService, 8080, config_path);
+       ioService.run();
+
+      Server::deserialize(fcg);
+      Server::run_processes(fcg);
+    } 
+    catch (const std::exception& e) {
       spdlog::error("Exception: {}", e.what());
     }
   }
