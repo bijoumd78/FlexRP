@@ -1,0 +1,19 @@
+{
+  "writeToConsole" : true,
+  "writeToFile" : true,
+  "channelType": [
+    {
+      "type": "console",
+      "loggingLevel": "info",
+      "loggingPattern":"%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v"
+    },
+    {
+      "type": "file",
+      "loggingLevel": "info",
+      "path": "logs/log.txt",
+      "rotationInBytes": 2048,
+      "loggingPattern": "%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v",
+      "maxNumberFiles": 100
+    }
+  ]
+}

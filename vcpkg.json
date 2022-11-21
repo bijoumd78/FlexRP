@@ -9,6 +9,7 @@
     "pugixml",
     "cppzmq",
     "spdlog",
+    "jsoncpp",
     "ismrmrd"
   ]
 }

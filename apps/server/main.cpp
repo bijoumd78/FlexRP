@@ -1,12 +1,13 @@
 #include "Flexrp_xml.h"
-#include <spdlog/spdlog.h>
+#include "logger.h"
 #include <exception>
 
 int main() {
-  // Set global log level to debug
-  spdlog::set_level(spdlog::level::debug); 
+ 
+  // Load logging configuration file
+  common::logger::Logger log("logConfig.json");
 
-  spdlog::info("Flex Recon Pipeline started...");
+  FL_INFO("Flex Recon Pipeline started...");  
   using namespace FlexRP;
   while (true) {
     Flexrp_configuration fcg;

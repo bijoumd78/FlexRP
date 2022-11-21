@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
       std::cout << desc << std::endl;
       return EXIT_FAILURE;
     }
-  } catch (std::exception& e) {
+  } catch (const std::exception& e) {
     spdlog::error("error: {}", e.what());
     return EXIT_FAILURE;
   } catch (...) {
@@ -84,9 +84,9 @@ int main(int argc, char* argv[]) {
     FlexRP_client::Client client(ioService, endpointIterator, filePath);
 
     ioService.run();
-  } catch (std::fstream::failure& e) {
+  } catch (const std::fstream::failure& e) {
     spdlog::error(e.what());
-  } catch (std::exception& e) {
+  } catch (const std::exception& e) {
     spdlog::error("Exception: {}", e.what());
   }
 
