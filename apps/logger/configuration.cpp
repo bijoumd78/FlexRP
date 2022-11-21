@@ -65,49 +65,14 @@ namespace common::logger {
         
     }
 
-    std::string Configuration::getConsoleLoggingLevel() const
-    {
-        return m_console.loggingLevel;
-    }
-
-    std::string Configuration::getConsoleLoggingPattern() const
-    {
-        return m_console.loggingPattern;
-    }
-
-    std::string Configuration::getConsoleTimeZone() const
-    {
-        return m_console.timeZone;
-    }
-
-    std::string Configuration::getFileLoggingLevel() const
-    {
-        return m_file.loggingLevel;
-    }
-
-    std::string Configuration::getFilePath() const
-    {
-        return m_file.path;
-    }
-
-    std::string Configuration::getFileLoggingPattern() const
-    {
-        return m_file.loggingPattern;
-    }
-
-    std::string Configuration::getFileTimeZone() const
-    {
-        return m_file.timeZone;
-    }
-
-    size_t Configuration::getFileMaxSize() const
-    {
-        return m_file.maxSize;
-    }
-
-    size_t Configuration::getFileMaxNumberFiles() const
-    {
-        return m_file.maxNumberFiles;
-    }
+    std::string Configuration::getConsoleLoggingLevel() const   { return m_console.loggingLevel;   }
+    std::string Configuration::getConsoleLoggingPattern() const { return m_console.loggingPattern; }
+    std::string Configuration::getConsoleTimeZone() const       { return m_console.timeZone;       }
+    std::string Configuration::getFileLoggingLevel() const      { return m_file.loggingLevel;      }
+    std::string Configuration::getFilePath() const              { return m_file.path;              }
+    std::string Configuration::getFileLoggingPattern() const    { return m_file.loggingPattern;    }
+    std::string Configuration::getFileTimeZone() const          { return m_file.timeZone;          }
+    size_t Configuration::getFileMaxSize() const                { return m_file.maxSize;           }
+    size_t Configuration::getFileMaxNumberFiles() const         { return m_file.maxNumberFiles;    }
 
 }

@@ -28,18 +28,18 @@ class Configuration
     private:
 
         struct{
-            inline static std::string loggingLevel{ "info" };
-            inline static std::string loggingPattern{"%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v"};
-            inline static std::string timeZone{"local"};
+            std::string loggingLevel{ "info" };
+            std::string loggingPattern{"%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v"};
+            std::string timeZone{"local"};
         }m_console;
 
         struct{
-            inline static std::string loggingLevel{ "info" };
-            inline static std::string path{ "logs/mylog.txt" };
-            inline static std::string loggingPattern{ "%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v" };
-            inline static size_t maxSize{ 1024 };
-            inline static size_t maxNumberFiles{10};
-            inline static std::string timeZone{"local"};
+            std::string loggingLevel{ "info" };
+            std::string path{ "logs/mylog.txt" };
+            std::string loggingPattern{ "%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v" };
+            size_t maxSize{ 1024 };
+            size_t maxNumberFiles{10};
+            std::string timeZone{"local"};
         }m_file;
     };
 
