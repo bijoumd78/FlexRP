@@ -14,11 +14,20 @@ namespace common::logger {
         // Dependency injection
         explicit Logger(std::string_view config);
 
-        static void info(const std::string& msg);
-        static void debug(const std::string& msg);
-        static void warn(const std::string& msg);
-        static void error(const std::string& msg);
-        static void critical(const std::string& msg);
+        template<typename T>         static void info(T&& msg)           { p_logger->info(std::forward<T>(msg));           }
+        template <typename ...Args>  static void info(Args&& ...msg)     { p_logger->info(std::forward<Args>(msg)...);     }
+
+        template<typename T>         static void debug(T&& msg)          { p_logger->debug(std::forward<T>(msg));          }
+        template <typename ...Args>  static void debug(Args&& ...msg)    { p_logger->debug(std::forward<Args>(msg)...);    }
+
+        template<typename T>         static void warn(T&& msg)           { p_logger->warn(std::forward<T>(msg));           }
+        template <typename ...Args>  static void warn(Args&& ...msg)     { p_logger->warn(std::forward<Args>(msg)...);     }
+
+        template<typename T>         static void error(T&& msg)          { p_logger->error(std::forward<T>(msg));          }
+        template <typename ...Args>  static void error(Args&& ...msg)    { p_logger->error(std::forward<Args>(msg)...);    }
+
+        template<typename T>         static void critical(T&& msg)       { p_logger->critical(std::forward<T>(msg));       }
+        template <typename ...Args>  static void critical(Args&& ...msg) { p_logger->critical(std::forward<Args>(msg)...); }
 
      private:
             spdlog::level::level_enum convertStringToLoggingLevel(const std::string& level)const;
@@ -26,9 +35,3 @@ namespace common::logger {
             inline static std::shared_ptr<spdlog::async_logger> p_logger {nullptr};
     };
 }
-
-#define FL_INFO(msg)     common::logger::Logger::info(msg)
-#define FL_DEBUG(msg)    common::logger::Logger::debug(msg)
-#define FL_WARN(msg)     common::logger::Logger::warn(msg)
-#define FL_ERROR(msg)    common::logger::Logger::error(msg)
-#define FL_CRITICAL(msg) common::logger::Logger::critical(msg)

@@ -35,12 +35,6 @@ Logger::Logger(std::string_view configFile):
      spdlog::register_logger(p_logger);
 }
 
-void Logger::info(const std::string& msg    ) { p_logger->info(msg);    }
-void Logger::debug(const std::string& msg   ) { p_logger->debug(msg);   }
-void Logger::warn(const std::string& msg    ) { p_logger->warn(msg);    }
-void Logger::error(const std::string& msg   ) { p_logger->error(msg);   }
-void Logger::critical(const std::string& msg) { p_logger->critical(msg);}
-
 spdlog::level::level_enum Logger::convertStringToLoggingLevel(const std::string& level) const
 {
     if(boost::iequals(level, std::string{"info"})    ) { return spdlog::level::info;    }

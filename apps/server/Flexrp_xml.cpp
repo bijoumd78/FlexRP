@@ -1,7 +1,7 @@
 #include "Flexrp_xml.h"
 #include "flexrpsharedmemory.h"
 #include "pugixml.hpp"
-#include <spdlog/spdlog.h>
+#include "logger.h"
 #include <algorithm>
 #include <boost/asio/read_until.hpp>
 #include <boost/filesystem.hpp>
@@ -15,6 +15,8 @@
 
 
 namespace FlexRP {
+
+using namespace common::logger;
 
 Session::Session(TcpSocket t_socket)
     : m_socket(std::move(t_socket)),
@@ -34,7 +36,7 @@ void Session::doRead() {
 }
 
 void Session::processRead(size_t t_bytesTransferred) {
-    spdlog::info("{}({}), in_avail = {}, size = {}, max_size = {}.", __FUNCTION__,
+    Logger::info("{}({}), in_avail = {}, size = {}, max_size = {}.", __FUNCTION__,
                t_bytesTransferred, m_requestBuf_.in_avail(),
                m_requestBuf_.size(), m_requestBuf_.max_size());
 
@@ -51,7 +53,7 @@ void Session::processRead(size_t t_bytesTransferred) {
   // write extra bytes to file
   do {
     requestStream.read(m_buf.data(), static_cast<long>(m_buf.size()));
-    spdlog::info("{} write {} bytes.", __FUNCTION__, requestStream.gcount());
+    Logger::info("{} write {} bytes.", __FUNCTION__, requestStream.gcount());
     m_outputFile.write(m_buf.data(), requestStream.gcount());
   } while (requestStream.gcount() > 0);
 
@@ -71,14 +73,14 @@ void Session::readData(std::istream &stream) {
   stream >> m_fileSize;
   stream.read(m_buf.data(), 2);
 
-  spdlog::info("{} size is {}, tellg = {}", m_fileName, m_fileSize,
+  Logger::info("{} size is {}, tellg = {}", m_fileName, m_fileSize,
                stream.tellg());
 }
 
 void Session::createFile() {
   m_outputFile.open(m_fileName, std::ios_base::binary);
   if (!m_outputFile) {
-    spdlog::info("{}: Failed to create {}", __LINE__, m_fileName);
+    Logger::info("{}: Failed to create {}", __LINE__, m_fileName);
     return;
   }
 }
@@ -88,10 +90,10 @@ void Session::doReadFileContent(size_t t_bytesTransferred) {
     m_outputFile.write(m_buf.data(),
                        static_cast<std::streamsize>(t_bytesTransferred));
 
-    spdlog::info("{} recv {} bytes", __FUNCTION__, m_outputFile.tellp());
+    Logger::info("{} recv {} bytes", __FUNCTION__, m_outputFile.tellp());
 
     if (m_outputFile.tellp() >= static_cast<std::streamsize>(m_fileSize)) {
-      spdlog::info("Received file: {}", m_fileName);
+      Logger::info("Received file: {}", m_fileName);
       return;
     }
   }
@@ -105,7 +107,7 @@ void Session::doReadFileContent(size_t t_bytesTransferred) {
 
 void Session::handleError(std::string const &t_functionName,
                           boost::system::error_code const &t_ec) {
-   spdlog::info("{} in {} due to {}", __FUNCTION__, t_functionName,
+   Logger::info("{} in {} due to {}", __FUNCTION__, t_functionName,
                t_ec.message());
 }
 
@@ -133,7 +135,7 @@ void Server::createWorkDirectory() {
   using namespace boost::filesystem;
    auto currentPath = path(m_configFileDir);
   if (!exists(currentPath) && !create_directory(currentPath))
-      spdlog::error("Coudn't create working directory: {}", m_configFileDir);
+      Logger::error("Coudn't create working directory: {}", m_configFileDir);
   current_path(currentPath);
 }
 
@@ -142,7 +144,7 @@ void Server::deserialize(Flexrp_configuration &fcg) {
   const auto full_path{boost::filesystem::current_path().append("/" + Session::getFilename())};
 
   if (!boost::filesystem::exists(full_path)) {
-    spdlog::error("{} doesn't exist...", full_path.string());
+    Logger::error("{} doesn't exist...", full_path.string());
     return;
   }
 
@@ -219,7 +221,7 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
-          spdlog::debug("{} {} {}", exec.string(), arg1, arg2);
+          Logger::debug("{} {} {}", exec.string(), arg1, arg2);
 
           bp::spawn(exec, arg1, arg2, g);
           ++count;
@@ -237,14 +239,14 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
                             ? connect_port + std::to_string(5 + count + 1)
                             : bind_port + std::to_string(5 + count + 1);
 
-                    spdlog::debug("{} {} {}", exec.string(), arg1, arg2);
+                    Logger::debug("{} {} {}", exec.string(), arg1, arg2);
 
                     if (!rc.properties.empty()) {
-                      spdlog::info("{}", rc.name.data());
+                      Logger::info("{}", rc.name.data());
                       std::vector<std::string> v;
 
                       for (auto e : rc.properties) {
-                        spdlog::debug("{} : {}", e.name, e.value);
+                        Logger::debug("{} : {}", e.name, e.value);
 
                         v.emplace_back(e.name);
                         v.emplace_back(e.value);
@@ -269,7 +271,7 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
-          spdlog::debug("{} {}", exec.string(), arg1);
+          Logger::debug("{} {}", exec.string(), arg1);
 
           bp::spawn(exec, arg1, g);
         });

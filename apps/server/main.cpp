@@ -4,10 +4,12 @@
 
 int main() {
  
-  // Load logging configuration file
-  common::logger::Logger log("logConfig.json");
+    using namespace common::logger;
 
-  FL_INFO("Flex Recon Pipeline started...");  
+  // Load logging configuration file
+  Logger log("logConfig.json");
+
+  Logger::info("Flex Recon Pipeline started...");  
   using namespace FlexRP;
   while (true) {
     Flexrp_configuration fcg;
