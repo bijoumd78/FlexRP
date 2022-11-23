@@ -6,7 +6,7 @@
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
-#include <spdlog/spdlog.h>
+#include <logger.h>
 
 namespace FlexRP {
 
@@ -26,26 +26,26 @@ int Worker6::process() {
       try {
         ISMRMRD::deserialize(static_cast<char *>(message.data()), h);
       } catch (...) {
-        spdlog::error("Failed to parse incoming ISMRMRD Header");
+        Logger::error("Failed to parse incoming ISMRMRD Header");
       }
 
-      spdlog::info("I am worker 6");
+      Logger::info("I am worker 6");
 
-      /* spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+      /* Logger::info("{} is {}", h.userParameters->userParameterLong[0].name,
                    h.userParameters->userParameterLong[0].value);*/
 
       //*** Message body
       receiver.recv(&body_msg);
       auto acq = static_cast<complex_float_t *>(body_msg.data());
 
-      spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+      Logger::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
 
       // Get properties (name, value)
       constexpr size_t n = 4;
       std::vector<std::string> property;
       FlexRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
       for (size_t e = 0; e < n; e += 2)
-        spdlog::info("Property(name, value)  {} : {}", property[e],
+        Logger::info("Property(name, value)  {} : {}", property[e],
                      property[e + 1]);
 
       //  Do the work

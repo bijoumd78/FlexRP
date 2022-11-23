@@ -4,13 +4,13 @@
 
 int main() {
  
-    using namespace common::logger;
+    using namespace FlexRP;
 
   // Load logging configuration file
   Logger log("logConfig.json");
 
-  Logger::info("Flex Recon Pipeline started...");  
-  using namespace FlexRP;
+  Logger::info("Flex Recon Pipeline started...");
+ 
   while (true) {
     Flexrp_configuration fcg;
     try {
@@ -25,7 +25,7 @@ int main() {
       Server::run_processes(fcg);
     } 
     catch (const std::exception& e) {
-      spdlog::error("Exception: {}", e.what());
+      Logger::error("Exception: {}", e.what());
     }
   }
 }

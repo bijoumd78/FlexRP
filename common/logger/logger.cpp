@@ -5,9 +5,7 @@
 #include <boost/algorithm/string.hpp>
 #include <utility>
 
-namespace common::logger {
-
-    // Log level enum
+namespace FlexRP {
 
 Logger::Logger(std::string_view configFile):
     p_config{std::make_unique<Configuration>(configFile)}

@@ -2,7 +2,8 @@
 #include "catch2/catch.hpp"
 #include "flexrpsharedmemory.h"
 
-TEST_CASE("Get recon module property values", "Properties") {
+TEST_CASE("Get recon module property values", "Properties") 
+{
   static std::vector<std::string> properties{"1", "3.14", "false",
                                              "Hello unit test"};
   FlexRP::FlexRPSharedMemory::createSharedMemory(properties);

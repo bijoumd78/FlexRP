@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace common::logger {
+namespace FlexRP {
 
 class Configuration
 {
@@ -30,7 +30,7 @@ class Configuration
         struct{
             std::string loggingLevel{ "info" };
             std::string loggingPattern{"%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v"};
-            std::string timeZone{"local"};
+            std::string timeZone{"local"}; // Not being used
         }m_console;
 
         struct{
@@ -39,7 +39,7 @@ class Configuration
             std::string loggingPattern{ "%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v" };
             size_t maxSize{ 1024 };
             size_t maxNumberFiles{10};
-            std::string timeZone{"local"};
+            std::string timeZone{"local"}; // Not being used
         }m_file;
     };
 

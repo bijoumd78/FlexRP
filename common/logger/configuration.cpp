@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace common::logger {
+namespace FlexRP {
 
     Configuration::Configuration(std::string_view configFile)
     {
@@ -19,7 +19,10 @@ namespace common::logger {
     {
         Json::Value root;
         std::ifstream ifs;
-        ifs.open(configFile.data());
+
+
+
+        ifs.open(configFile.data(), std::ios::in);
         if (ifs.fail()) 
         { 
             std::cout << "Unable to read the configuration file: " << configFile << std::endl;

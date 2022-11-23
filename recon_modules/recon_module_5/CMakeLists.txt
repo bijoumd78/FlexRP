@@ -6,7 +6,7 @@ set( SRC
     )
 
 add_library(worker5_lib ${SRC})
-target_link_libraries(worker5_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules spdlog::spdlog )
+target_link_libraries(worker5_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules FLogger )
 set_target_properties(worker5_lib PROPERTIES FOLDER "recon_module_5")
 
 add_executable(consumer2 main.cpp)

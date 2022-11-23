@@ -54,7 +54,9 @@ foreach(p LIB BIN INCLUDE CMAKE)
 endforeach()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-include_directories(./include)
+include_directories(common/logger)
+include_directories(common/include)
+
 
 set(Boost_USE_STATIC_LIBS    OFF)
 set(Boost_USE_MULTITHREADED  ON)
@@ -78,7 +80,7 @@ find_package(HDF5 REQUIRED)
 find_package(FFTW3 CONFIG REQUIRED)
 find_package(ISMRMRD REQUIRED)
 
-add_subdirectory(include)
+add_subdirectory(common)
 add_subdirectory(apps)
 add_subdirectory(recon_modules)
 

@@ -5,7 +5,7 @@
 #include <memory>
 
 
-namespace common::logger {
+namespace FlexRP {
 
     class Logger
     {

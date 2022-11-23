@@ -1,5 +1,3 @@
-include_directories(../logger)
-
 set( SOURCES
     Flexrp_xml.h
     Flexrp_xml.cpp

@@ -16,8 +16,6 @@
 
 namespace FlexRP {
 
-using namespace common::logger;
-
 Session::Session(TcpSocket t_socket)
     : m_socket(std::move(t_socket)),
       m_buf{},

@@ -1,5 +1,5 @@
 #include "Base_Modules.h"
-#include <spdlog/spdlog.h>
+#include <logger.h>
 #if defined(_WIN32)
 #include <chrono>
 #endif
@@ -93,7 +93,14 @@ Module_Sink_1::~Module_Sink_1() {
 
   auto total_msec =
       static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
-  spdlog::info("Total elapsed time: {} msec", total_msec);
+
+  try{
+  Logger::info("Total elapsed time: {} msec", total_msec);
+  }
+  catch (const std::exception& e)
+  {
+      std::cout << e.what() << std::endl;
+  }
 
   // Send kill signal to workers
   s_send(controller, "KILL");
@@ -140,7 +147,7 @@ Module_Sink_2::~Module_Sink_2() {
 
   auto total_msec =
       static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
-  spdlog::info("Total elapsed time: {} msec", total_msec);
+  Logger::info("Total elapsed time: {} msec", total_msec);
 
   // Send kill signal to workers
   s_send(controller, "KILL");

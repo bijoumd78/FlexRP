@@ -5,7 +5,7 @@
 #include <ismrmrd/ismrmrd.h>
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
-#include <spdlog/spdlog.h>
+#include <logger.h>
 
 namespace FlexRP {
 
@@ -22,19 +22,19 @@ int FlexRP::Worker5::process() {
     try {
       ISMRMRD::deserialize(static_cast<char *>(message.data()), h);
     } catch (...) {
-      spdlog::error("Failed to parse incoming ISMRMRD Header");
+      Logger::error("Failed to parse incoming ISMRMRD Header");
     }
 
-    spdlog::info("I am the last worker in the chain...");
+    Logger::info("I am the last worker in the chain...");
 
-    /*spdlog::info("{} is {}", h.userParameters->userParameterLong[0].name,
+    /*Logger::info("{} is {}", h.userParameters->userParameterLong[0].name,
                  h.userParameters->userParameterLong[0].value);*/
 
     //*** Message body
     receiver.recv(&body_msg);
     auto acq = static_cast<complex_float_t *>(body_msg.data());
 
-    spdlog::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+    Logger::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
 
     // Send final data to the client
     sender_cl.send(message);

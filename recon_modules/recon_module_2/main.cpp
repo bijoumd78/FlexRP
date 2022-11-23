@@ -7,12 +7,15 @@
  *****************************************************************************/
 
 #include "worker2.h"
-#include <spdlog/spdlog.h>
+#include <logger.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
+  // Load logging configuration file
+  FlexRP::Logger log("logConfig.json");
+
   if (argc < 3) {
-    spdlog::error("Usage: {} input_port output_port", argv[0]);
+    FlexRP::Logger::error("Usage: {} input_port output_port", argv[0]);
     return EXIT_FAILURE;
   }
 
