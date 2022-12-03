@@ -12,7 +12,6 @@ class Configuration
         void loadConfigFile(std::string_view configFile);
 
         std::string getFilePath()const;
-        std::string getFileLoggingPattern()const;
         size_t      getFileMaxSize()const;
         size_t      getFileMaxNumberFiles()const;
         bool        isLoggingToConsoleEnabled()const;
@@ -25,7 +24,6 @@ class Configuration
 
         struct{
             std::string path{ "logs/mylog.txt" };
-            std::string loggingPattern{ "%Y-%m-%d %H:%M:%S [%t] %^[%l]%$ %v" };
             size_t maxSize{ 1024 };
             size_t maxNumberFiles{10};
         }m_file;

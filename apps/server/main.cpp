@@ -20,9 +20,9 @@ int main() {
    bp::child c(logServerPath);
    if (c.running()){
 
-        using namespace FlexRP;
-        static Logger log;
-        log.info( "Flex Recon Pipeline started...");
+      using namespace FlexRP;
+      static Logger log;
+      log.info( "Flex Recon Pipeline started...");
  
       while (true) {
         Flexrp_configuration fcg;

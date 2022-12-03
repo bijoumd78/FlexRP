@@ -2,7 +2,7 @@
  * Description: New_Recon_Framework
  * Author: Mahamadou Diakite
  * Lang: C/C++
- *  Date: 3/15/2018
+ *  Date: 12/3/2022
  * Version: 0.0.1
  *****************************************************************************/
 
@@ -12,11 +12,7 @@
 #include <sstream>
 
 int main(int argc, char *argv[]) {
- 
-  using namespace FlexRP;
-  static Logger log;
-  log.info("Starting worker4");
-
+  static FlexRP::Logger log;
   if (argc < 2) {
     std::stringstream ss;
     ss << "Usage: " << argv[0] << " input_port";

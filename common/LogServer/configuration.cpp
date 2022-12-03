@@ -48,7 +48,6 @@ void Configuration::loadConfigFile(std::string_view configFile)
     {
         if ( arr[i].isMember("type") && boost::iequals( arr[i]["type"].asString(), std::string{ "file" } ))
         {
-            m_file.loggingPattern = arr[i].isMember("loggingPattern")  ? arr[i]["loggingPattern"].asString()  : m_file.loggingPattern;
             m_file.path           = arr[i].isMember("path")            ? arr[i]["path"].asString()            : m_file.path;
             m_file.maxSize        = arr[i].isMember("rotationInBytes") ? arr[i]["rotationInBytes"].asUInt64() : m_file.maxSize;
             m_file.maxNumberFiles = arr[i].isMember("maxNumberFiles")  ? arr[i]["maxNumberFiles"].asUInt64()  : m_file.maxNumberFiles;
@@ -61,7 +60,6 @@ void Configuration::loadConfigFile(std::string_view configFile)
 }
 
 std::string Configuration::getFilePath() const              { return m_file.path;              }
-std::string Configuration::getFileLoggingPattern() const    { return m_file.loggingPattern;    }
 size_t Configuration::getFileMaxSize() const                { return m_file.maxSize;           }
 size_t Configuration::getFileMaxNumberFiles() const         { return m_file.maxNumberFiles;    }
 
