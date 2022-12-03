@@ -3,6 +3,7 @@
 
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <zmq.hpp>
+#include <logger.h>
 #if(WIN32)
 #include <winsock.h>
 #endif
@@ -16,7 +17,7 @@ class Module_Worker_1 {
 
   virtual int Init();
   virtual int prepare();
-  virtual int process() = 0;
+  virtual int process(Logger& log) = 0;
   virtual int finalize();
 
  protected:
@@ -36,7 +37,7 @@ class Module_Worker_2 {
 
   virtual int Init();
   virtual int prepare();
-  virtual int process() = 0;
+  virtual int process(Logger& log) = 0;
   virtual int finalize();
 
  protected:
@@ -52,15 +53,16 @@ class Module_Worker_2 {
 // Collects completed works
 class Module_Sink_1 {
  public:
-  explicit Module_Sink_1(const char *protocol);
+  explicit Module_Sink_1( Logger& log, const char *protocol);
   virtual ~Module_Sink_1();
 
   virtual int Init();
   virtual int prepare();
-  virtual int process() = 0;
+  virtual int process(Logger& log) = 0;
   virtual int finalize();
 
  protected:
+  Logger& m_log;
   zmq::context_t context;
   zmq::socket_t receiver;
   zmq::socket_t sender_cl;
@@ -79,7 +81,7 @@ class Module_Sink_2 {
 
   virtual int Init();
   virtual int prepare();
-  virtual int process() = 0;
+  virtual int process(Logger& log) = 0;
   virtual int finalize();
 
  protected:

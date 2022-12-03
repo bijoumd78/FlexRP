@@ -7,21 +7,25 @@
  *****************************************************************************/
 
 #include "worker7.h"
-#include <stdlib.h>
 #include <logger.h>
-
+#include <stdlib.h>
+#include <sstream>
 
 int main(int argc, char *argv[]) {
-  // Load logging configuration file
-  FlexRP::Logger log("logConfig.json");
+ 
+  using namespace FlexRP;
+  static FlexRP::Logger log;
+  log.info("Starting worker7");
 
   if (argc < 3) {
-    FlexRP::Logger::error("Usage: {} input_port output_port", argv[0]);
+    std::stringstream ss;
+    ss << "Usage: " << argv[0] << " input_port output_port";
+    log.error(ss.str());
     return EXIT_FAILURE;
   }
 
   FlexRP::Worker7 w(argv[1], argv[2]);
-  w.process();
+  w.process(log);
 
   return EXIT_SUCCESS;
 }

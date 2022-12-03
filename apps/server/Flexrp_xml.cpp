@@ -1,7 +1,6 @@
 #include "Flexrp_xml.h"
 #include "flexrpsharedmemory.h"
 #include "pugixml.hpp"
-#include "logger.h"
 #include <algorithm>
 #include <boost/asio/read_until.hpp>
 #include <boost/filesystem.hpp>
@@ -12,6 +11,7 @@
 #include <boost/unordered_map.hpp>
 #include <functional>
 #include <stdexcept>
+#include <sstream>
 
 
 namespace FlexRP {
@@ -22,94 +22,115 @@ Session::Session(TcpSocket t_socket)
       m_fileSize(0)
 {}
 
-void Session::doRead() {
+void Session::doRead(Logger& log) {
   auto self = shared_from_this();
   async_read_until(m_socket, m_requestBuf_, "\n\n",
-                   [this, self](boost::system::error_code ec, size_t bytes) {
+                   [this, self, &log](boost::system::error_code ec, size_t bytes) {
                      if (!ec)
-                       processRead(bytes);
+                       processRead(log, bytes);
                      else
-                       handleError(__FUNCTION__, ec);
+                       handleError(log, __FUNCTION__, ec);
                    });
 }
 
-void Session::processRead(size_t t_bytesTransferred) {
-    Logger::info("{}({}), in_avail = {}, size = {}, max_size = {}.", __FUNCTION__,
-               t_bytesTransferred, m_requestBuf_.in_avail(),
-               m_requestBuf_.size(), m_requestBuf_.max_size());
+void Session::processRead(Logger& log, size_t t_bytesTransferred) {
+    std::stringstream ss;
+
+    ss << __FUNCTION__ << "(" << t_bytesTransferred << ") in_avail = " << m_requestBuf_.in_avail() 
+        << " size = " << m_requestBuf_.size() << " max_size = " << m_requestBuf_.max_size();
+    log.info(ss.str());
 
   std::istream requestStream(&m_requestBuf_);
-  readData(requestStream);
+  readData(log, requestStream);
 
   auto pos = m_fileName.find_last_of('\\');
 
   if (pos != std::string::npos) 
       m_fileName = m_fileName.substr(pos + 1);
 
-  createFile();
+  createFile(log);
 
   // write extra bytes to file
   do {
     requestStream.read(m_buf.data(), static_cast<long>(m_buf.size()));
-    Logger::info("{} write {} bytes.", __FUNCTION__, requestStream.gcount());
+
+    // Reset string stream
+    ss.str("");
+    ss.clear();
+    ss << __FUNCTION__ << " write " << requestStream.gcount() << " bytes.";
+    log.info(ss.str());
+
     m_outputFile.write(m_buf.data(), requestStream.gcount());
   } while (requestStream.gcount() > 0);
 
   auto self = shared_from_this();
   m_socket.async_read_some(
       boost::asio::buffer(m_buf.data(), m_buf.size()),
-      [this, self](boost::system::error_code ec, size_t bytes) {
+      [this, self, &log](boost::system::error_code ec, size_t bytes) {
         if (!ec)
-          doReadFileContent(bytes);
+          doReadFileContent(log, bytes);
         else
-          handleError(__FUNCTION__, ec);
+          handleError(log, __FUNCTION__, ec);
       });
 }
 
-void Session::readData(std::istream &stream) {
+void Session::readData(Logger& log, std::istream &stream) {
   stream >> m_fileName;
   stream >> m_fileSize;
   stream.read(m_buf.data(), 2);
 
-  Logger::info("{} size is {}, tellg = {}", m_fileName, m_fileSize,
-               stream.tellg());
+  std::stringstream ss;
+  ss << m_fileName << " size is " << m_fileSize << ", tellg = " << stream.tellg();
+  log.info(ss.str());
 }
 
-void Session::createFile() {
+void Session::createFile(Logger& log) {
   m_outputFile.open(m_fileName, std::ios_base::binary);
   if (!m_outputFile) {
-    Logger::info("{}: Failed to create {}", __LINE__, m_fileName);
+
+    std::stringstream ss;
+    ss << __LINE__ << ": Failed to create " << m_fileName;
+    log.info(ss.str());
     return;
   }
 }
 
-void Session::doReadFileContent(size_t t_bytesTransferred) {
+void Session::doReadFileContent(Logger& log, size_t t_bytesTransferred) {
   if (t_bytesTransferred > 0) {
     m_outputFile.write(m_buf.data(),
                        static_cast<std::streamsize>(t_bytesTransferred));
 
-    Logger::info("{} recv {} bytes", __FUNCTION__, m_outputFile.tellp());
+    std::stringstream ss;
+    ss << __FUNCTION__ << " recv " << m_outputFile.tellp() << " bytes";
+    log.info(ss.str());
 
     if (m_outputFile.tellp() >= static_cast<std::streamsize>(m_fileSize)) {
-      Logger::info("Received file: {}", m_fileName);
+
+      // Reset string stream
+        ss.str("");
+        ss.clear();
+        ss << "Received file: " << m_fileName;
+      log.info(ss.str());
       return;
     }
   }
   auto self = shared_from_this();
   m_socket.async_read_some(
       boost::asio::buffer(m_buf.data(), m_buf.size()),
-      [this, self](boost::system::error_code, size_t bytes) {
-        doReadFileContent(bytes);
+      [this, self, &log](boost::system::error_code, size_t bytes) {
+        doReadFileContent(log, bytes);
       });
 }
 
-void Session::handleError(std::string const &t_functionName,
+void Session::handleError(Logger& log, std::string const &t_functionName,
                           boost::system::error_code const &t_ec) {
-   Logger::info("{} in {} due to {}", __FUNCTION__, t_functionName,
-               t_ec.message());
+
+    std::stringstream ss;
+    ss << __FUNCTION__ << " in " << t_functionName << " due to " << t_ec.message();
+    log.info(ss.str());
 }
 
-Server::Server(IoService &t_ioService, short t_port,
+Server::Server(Logger& log, IoService &t_ioService, short t_port,
                std::string const &t_workDirectory)
     : m_socket(t_ioService),
       m_acceptor(t_ioService, boost::asio::ip::tcp::endpoint(
@@ -117,32 +138,38 @@ Server::Server(IoService &t_ioService, short t_port,
                                   static_cast<unsigned short>(t_port))),
      m_configFileDir(t_workDirectory)
 {
-  createWorkDirectory();
-  doAccept();
+  createWorkDirectory(log);
+  doAccept(log);
 }
 
-void Server::doAccept() {
-  m_acceptor.async_accept(m_socket, [this](boost::system::error_code ec) {
-    if (!ec) std::make_shared<Session>(std::move(m_socket))->start();
+void Server::doAccept(Logger& log) {
+  m_acceptor.async_accept(m_socket, [this, &log](boost::system::error_code ec) {
+    if (!ec) std::make_shared<Session>(std::move(m_socket))->start(log);
     // Enable this statement for an infinite loop
     // doAccept();
   });
 }
 
-void Server::createWorkDirectory() {
+void Server::createWorkDirectory(Logger& log) {
   using namespace boost::filesystem;
    auto currentPath = path(m_configFileDir);
   if (!exists(currentPath) && !create_directory(currentPath))
-      Logger::error("Coudn't create working directory: {}", m_configFileDir);
+  {
+      std::stringstream ss;
+      ss << "Coudn't create working directory: " << m_configFileDir;
+      log.error(ss.str());
+  }
   current_path(currentPath);
 }
 
-void Server::deserialize(Flexrp_configuration &fcg) {
+void Server::deserialize(Logger& log, Flexrp_configuration &fcg) {
   // Rebuild the full path
   const auto full_path{boost::filesystem::current_path().append("/" + Session::getFilename())};
 
   if (!boost::filesystem::exists(full_path)) {
-    Logger::error("{} doesn't exist...", full_path.string());
+    std::stringstream ss;
+    ss << full_path.string() << " doesn't exist...";
+    log.error(ss.str());
     return;
   }
 
@@ -153,7 +180,6 @@ void Server::deserialize(Flexrp_configuration &fcg) {
 
   pugi::xml_node nodes = doc.child("FleXReconPipelineConfiguration");
 
-  // Start filling the config struct
   pugi::xml_node reader = nodes.child("reader");
   while (reader) {
     Readers r;
@@ -189,7 +215,7 @@ void Server::deserialize(Flexrp_configuration &fcg) {
   }
 }
 
-void Server::run_processes(const Flexrp_configuration &fcg) {
+void Server::run_processes(Logger& log, const Flexrp_configuration &fcg) {
   // Remove shared memory on construction and destruction
   namespace bip = boost::interprocess;
   struct shm_remove {
@@ -208,6 +234,7 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
     // Get Server directory
     std::vector<boost::filesystem::path> path{m_workDirectory};
 
+    std::stringstream ss;
     // Launch readers
     std::for_each(
         fcg.readers.cbegin(), fcg.readers.cend(), [&](const Readers &r) {
@@ -219,7 +246,11 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
 
-          Logger::debug("{} {} {}", exec.string(), arg1, arg2);
+          ss << exec.string() << " " << arg1 << " " << arg2;
+          log.debug(ss.str());
+          // Reset string stream
+          ss.str("");
+          ss.clear();
 
           bp::spawn(exec, arg1, arg2, g);
           ++count;
@@ -237,14 +268,22 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
                             ? connect_port + std::to_string(5 + count + 1)
                             : bind_port + std::to_string(5 + count + 1);
 
-                    Logger::debug("{} {} {}", exec.string(), arg1, arg2);
+                    ss << exec.string() << " " << arg1 << " " << arg2;
+                    log.debug(ss.str());
+                    // Reset string stream
+                    ss.str("");
+                    ss.clear();
 
                     if (!rc.properties.empty()) {
-                      Logger::info("{}", rc.name.data());
+                      log.info(rc.name.data());
                       std::vector<std::string> v;
 
                       for (auto e : rc.properties) {
-                        Logger::debug("{} : {}", e.name, e.value);
+                        ss << e.name << " : " << e.value;
+                        log.debug(ss.str());
+                        // Reset string stream
+                        ss.str("");
+                        ss.clear();
 
                         v.emplace_back(e.name);
                         v.emplace_back(e.value);
@@ -268,8 +307,8 @@ void Server::run_processes(const Flexrp_configuration &fcg) {
           const auto &arg2 = (count + 1) % 2 == 1
                           ? connect_port + std::to_string(5 + count + 1)
                           : bind_port + std::to_string(5 + count + 1);
-
-          Logger::debug("{} {}", exec.string(), arg1);
+          ss << exec.string() << " " << arg1;
+          log.debug(ss.str());
 
           bp::spawn(exec, arg1, g);
         });

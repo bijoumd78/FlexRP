@@ -4,7 +4,7 @@ set( SOURCES
     )
 
 add_library(Flexrp_xml ${SOURCES})
-target_link_libraries(Flexrp_xml PUBLIC ${Boost_LIBRARIES} pugixml FLogger FlexSharedMemory)
+target_link_libraries(Flexrp_xml PUBLIC FLogger ${Boost_LIBRARIES} pugixml FlexSharedMemory)
 set_target_properties(Flexrp_xml PROPERTIES FOLDER "server")
 
 add_executable(FleXRP main.cpp)

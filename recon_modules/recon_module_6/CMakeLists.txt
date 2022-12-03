@@ -6,7 +6,7 @@ set( SRC
     )
 
 add_library(worker6_lib ${SRC})
-target_link_libraries(worker6_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules FLogger FlexSharedMemory )
+target_link_libraries(worker6_lib PUBLIC FLogger ISMRMRD::ISMRMRD Base_Modules FlexSharedMemory )
 set_target_properties(worker6_lib PROPERTIES FOLDER "recon_module_6")
 
 add_executable(worker6 main.cpp)

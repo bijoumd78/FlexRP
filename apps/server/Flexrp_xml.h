@@ -8,8 +8,10 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <logger.h>
 
 namespace FlexRP {
+
 struct Readers {
   std::string name;
 };
@@ -40,19 +42,19 @@ class Session : public std::enable_shared_from_this<Session> {
 
   explicit Session(TcpSocket t_socket);
 
-  void start() { doRead(); }
+  void start(Logger& log) { doRead(log); }
 
   static std::string getFilename() {
       return m_fileName;
   }
 
  private:
-  void doRead();
-  void processRead(size_t t_bytesTransferred);
-  void createFile();
-  void readData(std::istream& stream);
-  void doReadFileContent(size_t t_bytesTransferred);
-  void handleError(std::string const& t_functionName,
+  void doRead(Logger& log);
+  void processRead(Logger& log, size_t t_bytesTransferred);
+  void createFile(Logger& log);
+  void readData(Logger& log, std::istream& stream);
+  void doReadFileContent(Logger& log, size_t t_bytesTransferred);
+  void handleError(Logger& log, std::string const& t_functionName,
                    boost::system::error_code const& t_ec);
 
   TcpSocket m_socket;
@@ -70,17 +72,17 @@ class Server {
   using TcpAcceptor = boost::asio::ip::tcp::acceptor;
   using IoService = boost::asio::io_service;
 
-  Server(IoService& t_ioService, short t_port,
+  Server(Logger& log, IoService& t_ioService, short t_port,
          std::string const& t_workDirectory);
 
-  static void deserialize(Flexrp_configuration& fcg);
-  static void run_processes(const Flexrp_configuration& fcg);
+  static void deserialize(Logger& log, Flexrp_configuration& fcg);
+  static void run_processes(Logger& log,const Flexrp_configuration& fcg);
   static boost::filesystem::path getWorkingDirectory(){ return m_workDirectory; }
 
  private:
   // Utility functions
-  void doAccept();
-  void createWorkDirectory();
+  void doAccept(Logger& log);
+  void createWorkDirectory(Logger& log);
 
   TcpSocket m_socket;
   TcpAcceptor m_acceptor;

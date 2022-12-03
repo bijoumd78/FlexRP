@@ -1,12 +1,13 @@
 include_directories(../core)
 
+
 set( SRC
     worker1.h
     worker1.cpp
     )
 
 add_library(worker1_lib ${SRC})
-target_link_libraries(worker1_lib PUBLIC ISMRMRD::ISMRMRD Base_Modules FLogger)
+target_link_libraries(worker1_lib PUBLIC FLogger ISMRMRD::ISMRMRD Base_Modules)
 set_target_properties(worker1_lib PROPERTIES FOLDER "recon_module_1")
 
 add_executable(worker1 main.cpp)

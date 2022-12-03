@@ -9,18 +9,22 @@
 #include "worker5.h"
 #include <logger.h>
 #include <stdlib.h>
+#include <sstream>
 
 int main(int argc, char *argv[]) {
-  // Load logging configuration file
-  FlexRP::Logger log("logConfig.json");
+  using namespace FlexRP;
+  static Logger log;
+  log.info("Starting worker5");
 
   if (argc < 2) {
-    FlexRP::Logger::error("Usage: {} input_port", argv[0]);
+    std::stringstream ss;
+    ss << "Usage: " << argv[0] << " input_port";
+    log.error(ss.str());
     return EXIT_FAILURE;
   }
 
   FlexRP::Worker5 s(argv[1]);
-  s.process();
+  s.process(log);
 
   return EXIT_SUCCESS;
 }

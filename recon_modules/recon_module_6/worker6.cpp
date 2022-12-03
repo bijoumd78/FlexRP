@@ -7,13 +7,14 @@
 #include <ismrmrd/meta.h>
 #include <ismrmrd/xml.h>
 #include <logger.h>
+#include <sstream>
 
 namespace FlexRP {
 
 Worker6::Worker6(const char *protocol1, const char *protocol2)
     : Module_Worker_2(protocol1, protocol2) {}
 
-int Worker6::process() {
+int Worker6::process(Logger& log) {
   //  Process messages from both sockets
   while (true) {
     zmq::poll(&items[0], 2, -1);
@@ -26,28 +27,34 @@ int Worker6::process() {
       try {
         ISMRMRD::deserialize(static_cast<char *>(message.data()), h);
       } catch (...) {
-        Logger::error("Failed to parse incoming ISMRMRD Header");
+          log.error("Failed to parse incoming ISMRMRD Header");
       }
 
-      Logger::info("I am worker 6");
-
-      /* Logger::info("{} is {}", h.userParameters->userParameterLong[0].name,
-                   h.userParameters->userParameterLong[0].value);*/
+      log.info("I am worker 6");
 
       //*** Message body
       receiver.recv(&body_msg);
       auto acq = static_cast<complex_float_t *>(body_msg.data());
 
-      Logger::info("Data:: {} {}", real(acq[4]), imag(acq[4]));
+      std::stringstream ss;
+      ss << "Data: " << real(acq[4]) << " " << imag(acq[4]);
+      log.info(ss.str());
+      //Resetstring stream
+      ss.str("");
+      ss.clear();
 
       // Get properties (name, value)
       constexpr size_t n = 4;
       std::vector<std::string> property;
       FlexRP::FlexRPSharedMemory::getReconmoduleProperty(property, n);
       for (size_t e = 0; e < n; e += 2)
-        Logger::info("Property(name, value)  {} : {}", property[e],
-                     property[e + 1]);
-
+      {
+          ss << "Property(name, value)  " << property[e] << " : " << property[e + 1];
+          log.info(ss.str());
+          //Reset string stream;
+          ss.str("");
+          ss.clear();
+      }
       //  Do the work
       s_sleep(1000);
 

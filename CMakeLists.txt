@@ -54,8 +54,8 @@ foreach(p LIB BIN INCLUDE CMAKE)
 endforeach()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-include_directories(common/logger)
 include_directories(common/include)
+include_directories(common/LogClient)
 
 
 set(Boost_USE_STATIC_LIBS    OFF)

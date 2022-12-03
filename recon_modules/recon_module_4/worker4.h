@@ -7,8 +7,8 @@ namespace FlexRP {
 
 class Worker4 final : public Module_Sink_1 {
  public:
-  explicit Worker4(const char *protocol);
-  int process() override;
+  explicit Worker4(Logger& log, const char *protocol);
+  int process(Logger& log) override;
 };
 
 }  // namespace FleXRP

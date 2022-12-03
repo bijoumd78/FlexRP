@@ -1,5 +1,6 @@
 #include "Base_Modules.h"
-#include <logger.h>
+#include <sstream>
+
 #if defined(_WIN32)
 #include <chrono>
 #endif
@@ -20,13 +21,14 @@ int gettimeofday(struct timeval *tp, struct timezone *tzp)
 }
 #endif // _WIN32
 
-Module_Worker_1::Module_Worker_1(const char *protocol1, const char *protocol2)
-    : context(1),
+Module_Worker_1::Module_Worker_1(const char *protocol1, const char *protocol2): 
+      context(1),
       receiver(context, ZMQ_PULL),
       sender(context, ZMQ_PUSH),
       controller(context, ZMQ_SUB),
       items{{static_cast<void *>(receiver), 0, ZMQ_POLLIN, 0},
-            {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0}} {
+            {static_cast<void *>(controller), 0, ZMQ_POLLIN, 0}} 
+{
   receiver.connect(protocol1);
   sender.connect(protocol2);
   controller.connect("tcp://localhost:7777");
@@ -58,8 +60,9 @@ int Module_Worker_2::prepare() { return EXIT_SUCCESS; }
 
 int Module_Worker_2::finalize() { return EXIT_SUCCESS; }
 
-Module_Sink_1::Module_Sink_1(const char *protocol)
-    : context(1),
+Module_Sink_1::Module_Sink_1(Logger& log, const char *protocol):
+      m_log(log),
+      context(1),
       receiver(context, ZMQ_PULL),
       sender_cl(context, ZMQ_PUSH),
       controller(context, ZMQ_PUB),
@@ -93,7 +96,7 @@ Module_Sink_1::~Module_Sink_1() {
 
   auto total_msec =
       static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
-
+  #if 0
   try{
   Logger::info("Total elapsed time: {} msec", total_msec);
   }
@@ -101,6 +104,10 @@ Module_Sink_1::~Module_Sink_1() {
   {
       std::cout << e.what() << std::endl;
   }
+  #endif
+  std::stringstream ss;
+  ss<< "Total elapsed time: " << total_msec << " msec" << std::endl;
+  m_log.info(ss.str());
 
   // Send kill signal to workers
   s_send(controller, "KILL");
@@ -147,7 +154,8 @@ Module_Sink_2::~Module_Sink_2() {
 
   auto total_msec =
       static_cast<int>(tdiff.tv_sec * 1000 + tdiff.tv_usec / 1000);
-  Logger::info("Total elapsed time: {} msec", total_msec);
+  //Logger::info("Total elapsed time: {} msec", total_msec);
+  std::cout << "Total elapsed time: " << total_msec << " msec" << std::endl;
 
   // Send kill signal to workers
   s_send(controller, "KILL");

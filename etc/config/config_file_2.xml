@@ -2,7 +2,6 @@
 
 <FleXReconPipelineConfiguration>
 	<!--FleXRecon pipeline configuration template -->	
-
 	<reader>
 		<name>worker1</name>
 	</reader>
@@ -10,25 +9,25 @@
 	<ReconModule>
 		<name>worker2</name>
 		<property><name>dummy_1</name><value>2</value></property>
-                <property><name>dummy_2</name><value>3.14</value></property>
+        <property><name>dummy_2</name><value>3.14</value></property>
 	</ReconModule>
 
 	<ReconModule>
 		<name>worker3</name>
 		<property><name>dummy_3</name><value>false</value></property>
-                <property><name>dummy_4</name><value>hello_property</value></property>
+        <property><name>dummy_4</name><value>hello_property</value></property>
 	</ReconModule>
 
-        <ReconModule>
+    <ReconModule>
 		<name>worker6</name>
 		<property><name>dummy_5</name><value>2</value></property>
-                <property><name>dummy_6</name><value>3.14</value></property>
+        <property><name>dummy_6</name><value>3.14</value></property>
 	</ReconModule>
 
        <ReconModule>
 		<name>worker7</name>
 		<property><name>dummy_7</name><value>40</value></property>
-                <property><name>dummy_8</name><value>Pink</value></property>
+        <property><name>dummy_8</name><value>Pink</value></property>
 	</ReconModule>
 	
 	<writer>
