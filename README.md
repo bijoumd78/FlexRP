@@ -24,6 +24,7 @@ The client can be launched with the following provided test data "data.h5" and o
  - C++17 or higher 
  - Boost-program-options
  - Boost-filesystem
+ - Boost-log
  - hdf5
  - fftw3
  - pugixml
