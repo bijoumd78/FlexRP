@@ -20,20 +20,13 @@ Logger::Logger()
                 );
 
         // Set the formatter
-        sink->set_formatter
-        (
-            expr::stream << "[" << a_timestamp << "] " << expr::smessage
-        );
-
+        sink->set_formatter ( expr::stream << "[" << a_timestamp << "] " << expr::smessage );
         logging::core::get()->add_sink(sink);
 
         // Add the commonly used attributes, including TimeStamp, ProcessID and ThreadID
         logging::add_common_attributes();
     }
-    catch (const std::exception& e)
-    {
-        std::cout << "Failure: " << e.what() << std::endl;
-    }
+    catch (const std::exception& e) { std::cout << "Failure: " << e.what() << std::endl; }
 }
 
     void Logger::info(std::string_view arg)     { BOOST_LOG(m_logger) << " [INFO] " <<  arg; }

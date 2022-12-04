@@ -18,14 +18,13 @@ class Configuration
         bool        isLoggingToFileEnabled()const;
 
     private:
-
         bool m_loggingToConsoleEnabled = false;
         bool m_loggingToFileEnabled    = false;
 
         struct{
             std::string path{ "logs/mylog.txt" };
             size_t maxSize{ 1024 };
-            size_t maxNumberFiles{10};
+            size_t maxNumberFiles{1};
         }m_file;
     };
 }

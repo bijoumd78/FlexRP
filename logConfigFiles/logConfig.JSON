@@ -6,8 +6,8 @@
       "type": "file",
       "loggingLevel": "info",
       "path": "logs/log.txt",
-      "rotationInBytes": 2048,
-      "maxNumberFiles": 100
+      "rotationInBytes": 1024,
+      "maxNumberFiles": 10
     }
   ]
 }

@@ -52,6 +52,9 @@ int main()
         // queue.receive() will block if the queue is empty.
         std::string message;
         static unsigned short count{};
+        std::ofstream logFile;
+        fs::path fileName{ path };
+        uintmax_t rotationSize{ config.getFileMaxSize() };
         while (queue.receive(message) == queue_t::succeeded)
         {
             if(config.isLoggingToConsoleEnabled()) {std::cout << message << std::endl;}
@@ -59,23 +62,20 @@ int main()
             if (config.isLoggingToFileEnabled())
             {
                 // Write to file
-                std::ofstream logFile;
-                fs::path fileName{ path };
-                uintmax_t rotationSize{ config.getFileMaxSize() };
                 logFile.open(fileName, std::ios_base::app | std::ios::out);
-                if (!logFile) { throw std::invalid_argument("File not created..."); }
+                if (!logFile) { throw std::invalid_argument("Failed to create Log file..."); }
 
-                if (auto fileSize = fs::file_size(fileName); fileSize > rotationSize)
+                // Check current file size
+                if (auto currentFileSize = fs::file_size(fileName); currentFileSize > rotationSize || (currentFileSize + message.size()) > rotationSize)
                 {
                     logFile.close();
                     const auto fileNameString = fileName.string();
                     auto pathWithoutExt = fileNameString.substr(0, fileNameString.find_last_of("."));
-                    const auto newFileName = pathWithoutExt + std::string{ "_" } + std::to_string(count+1) + std::string{ ".txt" };
+                    const auto newFileName = pathWithoutExt + std::string{ "_" } + std::to_string(++count) + std::string{ ".txt" };
                     fs::rename(fileName, fs::path{ newFileName });
                 }
 
                 logFile << message << '\n';
-                // Get file size
                 logFile.close();
             }
 

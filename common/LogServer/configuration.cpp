@@ -59,17 +59,10 @@ void Configuration::loadConfigFile(std::string_view configFile)
     }
 }
 
-std::string Configuration::getFilePath() const              { return m_file.path;              }
-size_t Configuration::getFileMaxSize() const                { return m_file.maxSize;           }
-size_t Configuration::getFileMaxNumberFiles() const         { return m_file.maxNumberFiles;    }
+bool Configuration::isLoggingToConsoleEnabled() const { return m_loggingToConsoleEnabled; }
+bool Configuration::isLoggingToFileEnabled() const    { return m_loggingToFileEnabled;    }
 
-bool Configuration::isLoggingToConsoleEnabled() const
-{
-    return m_loggingToConsoleEnabled;
-}
-
-bool Configuration::isLoggingToFileEnabled() const
-{
-    return m_loggingToFileEnabled;
-}
+std::string Configuration::getFilePath() const        { return m_file.path;               }
+size_t Configuration::getFileMaxSize() const          { return m_file.maxSize;            }
+size_t Configuration::getFileMaxNumberFiles() const   { return m_file.maxNumberFiles;     }
 }
