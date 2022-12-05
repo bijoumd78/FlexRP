@@ -34,6 +34,9 @@ int main()
         if(root.empty()) { root = fs::path{"logs"}; }
         if (!fs::is_directory(root) || !fs::exists(root)) { fs::create_directory(root); }
 
+        // Check number of files in the directory. Remove file older than 1 day
+        config.removeFileIfExceedingMaxFileAllow(root, 24h /*1h + 20min*/);
+
         using queue_t = logging::ipc::reliable_message_queue;
         // Create a message_queue_type object that is associated with the interprocess
         // message queue named "ipc_message_queue".
@@ -57,7 +60,10 @@ int main()
         uintmax_t rotationSize{ config.getFileMaxSize() };
         while (queue.receive(message) == queue_t::succeeded)
         {
-            if(config.isLoggingToConsoleEnabled()) {std::cout << message << std::endl;}
+            // Check number of files in the directory. Remove file older than 1 day
+            config.removeFileIfExceedingMaxFileAllow(root, 24h /*1h + 20min*/);
+
+            if(config.isLoggingToConsoleEnabled()) { std::cout << message << std::endl; }
 
             if (config.isLoggingToFileEnabled())
             {
@@ -66,7 +72,9 @@ int main()
                 if (!logFile) { throw std::invalid_argument("Failed to create Log file..."); }
 
                 // Check current file size
-                if (auto currentFileSize = fs::file_size(fileName); currentFileSize > rotationSize || (currentFileSize + message.size()) > rotationSize)
+                if ( auto currentFileSize = fs::file_size(fileName); 
+                     currentFileSize > rotationSize || 
+                     (currentFileSize + message.size()) > rotationSize )
                 {
                     logFile.close();
                     const auto fileNameString = fileName.string();
