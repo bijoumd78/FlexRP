@@ -6,6 +6,7 @@
  * Version: 0.0.1
  *****************************************************************************/
 #include "configuration.h"
+#include "fileUtility.h"
 #include <iostream>
 #include <string>
 #include <exception>
@@ -14,8 +15,6 @@
 #include <boost/log/utility/ipc/reliable_message_queue.hpp>
 #include <boost/log/utility/ipc/object_name.hpp>
 #include <boost/log/utility/open_mode.hpp>
-#include <thread>
-#include <stdexcept>
 
 namespace logging = boost::log;
 namespace keywords = boost::log::keywords;
@@ -25,7 +24,6 @@ using namespace std::chrono_literals;
 int main()
 {
     try {
-
         // Load logging configuration file
         FlexRP::Configuration config("logConfig.json");
         // Check if the logging directory exist
@@ -34,8 +32,9 @@ int main()
         if(root.empty()) { root = fs::path{"logs"}; }
         if (!fs::is_directory(root) || !fs::exists(root)) { fs::create_directory(root); }
 
-        // Check number of files in the directory. Remove file older than 1 day
-        config.removeFileIfExceedingMaxFileAllow(root, 24h /*1h + 20min*/);
+        // Make sure, the total number of log files in the logging directory is not exceeded
+        FlexRP::FileUtility logFiles;
+        logFiles.removeExcessFiles(root, config.getFileMaxNumberFiles());
 
         using queue_t = logging::ipc::reliable_message_queue;
         // Create a message_queue_type object that is associated with the interprocess
@@ -54,14 +53,13 @@ int main()
         // Keep reading log messages from the associated message queue and print them on the console.
         // queue.receive() will block if the queue is empty.
         std::string message;
-        static unsigned short count{};
         std::ofstream logFile;
         fs::path fileName{ path };
         uintmax_t rotationSize{ config.getFileMaxSize() };
         while (queue.receive(message) == queue_t::succeeded)
         {
-            // Check number of files in the directory. Remove file older than 1 day
-            config.removeFileIfExceedingMaxFileAllow(root, 24h /*1h + 20min*/);
+            // Make sure, the total number of log files in the logging directory is not exceeded
+            logFiles.removeExcessFiles(root, config.getFileMaxNumberFiles());
 
             if(config.isLoggingToConsoleEnabled()) { std::cout << message << std::endl; }
 
@@ -79,7 +77,7 @@ int main()
                     logFile.close();
                     const auto fileNameString = fileName.string();
                     auto pathWithoutExt = fileNameString.substr(0, fileNameString.find_last_of("."));
-                    const auto newFileName = pathWithoutExt + std::string{ "_" } + std::to_string(++count) + std::string{ ".txt" };
+                    const auto newFileName = pathWithoutExt + std::string{ "_" } + logFiles.getCurrentDataTime() + std::string{ ".txt" };
                     fs::rename(fileName, fs::path{ newFileName });
                 }
 

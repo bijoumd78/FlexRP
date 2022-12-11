@@ -67,7 +67,7 @@ if(WIN32)
     add_definitions( -D_WIN32_WINNT=0x0601 )
 endif()
 
-find_package(Boost COMPONENTS program_options filesystem REQUIRED)
+find_package(Boost COMPONENTS program_options filesystem date_time REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(CPPZMQ CONFIG REQUIRED)
 find_package(HDF5 REQUIRED)

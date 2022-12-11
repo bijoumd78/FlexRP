@@ -62,12 +62,6 @@ void Configuration::loadConfigFile(std::string_view configFile)
 bool Configuration::isLoggingToConsoleEnabled() const { return m_loggingToConsoleEnabled; }
 bool Configuration::isLoggingToFileEnabled() const    { return m_loggingToFileEnabled;    }
 
-std::size_t Configuration::numberOfFilesInLogDirectory(const std::filesystem::path& path) const
-{
-    using std::filesystem::directory_iterator;
-    return std::distance(directory_iterator(path), directory_iterator{});
-}
-
 std::string Configuration::getFilePath() const        { return m_file.path;               }
 size_t Configuration::getFileMaxSize() const          { return m_file.maxSize;            }
 size_t Configuration::getFileMaxNumberFiles() const   { return m_file.maxNumberFiles;     }

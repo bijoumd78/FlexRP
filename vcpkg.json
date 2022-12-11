@@ -4,6 +4,7 @@
   "dependencies": [
     "boost-program-options",
     "boost-filesystem",
+    "boost-date-time",
     "boost-log",
     "hdf5",
     "fftw3",

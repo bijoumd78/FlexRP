@@ -1,6 +1,8 @@
 set( SRC
     configuration.h
 	configuration.cpp
+    fileUtility.h
+    fileUtility.cpp
     main.cpp
     )
 
