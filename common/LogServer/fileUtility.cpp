@@ -2,9 +2,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <iostream>
 #include <sstream>
-#include <memory>
-#include <ctime>
-#include <map>
+
 
 namespace FlexRP {
 
