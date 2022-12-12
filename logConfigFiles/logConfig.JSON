@@ -4,7 +4,6 @@
   "channelType": [
     {
       "type": "file",
-      "loggingLevel": "info",
       "path": "logs/log.txt",
       "rotationInBytes": 10240,
       "maxNumberFiles": 20
