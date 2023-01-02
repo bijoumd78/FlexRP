@@ -8,11 +8,11 @@ set( SRC
 
 add_library(worker1_lib ${SRC})
 target_link_libraries(worker1_lib PUBLIC FLogger ISMRMRD::ISMRMRD Base_Modules)
-set_target_properties(worker1_lib PROPERTIES FOLDER "recon_module_1")
+set_target_properties(worker1_lib PROPERTIES FOLDER "recon_modules")
 
 add_executable(worker1 main.cpp)
 target_link_libraries(worker1 PUBLIC worker1_lib)
-set_target_properties(worker1 PROPERTIES FOLDER "recon_module_1")
+set_target_properties(worker1 PROPERTIES FOLDER "recon_modules")
 
 #install
 install (TARGETS

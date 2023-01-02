@@ -7,11 +7,11 @@ set( SRC
 
 add_library(worker3_lib ${SRC})
 target_link_libraries(worker3_lib PUBLIC FLogger ISMRMRD::ISMRMRD Base_Modules FlexSharedMemory )
-set_target_properties(worker3_lib PROPERTIES FOLDER "recon_module_3")
+set_target_properties(worker3_lib PROPERTIES FOLDER "recon_modules")
 
 add_executable(worker3 main.cpp)
 target_link_libraries(worker3 PUBLIC worker3_lib)
-set_target_properties(worker3 PROPERTIES FOLDER "recon_module_3")
+set_target_properties(worker3 PROPERTIES FOLDER "recon_modules")
 
 #install
 install (TARGETS

@@ -30,8 +30,8 @@ namespace FlexRP{
 	BOOST_LOG_ATTRIBUTE_KEYWORD(a_timestamp, "TimeStamp", attrs::local_clock::value_type)
 
 	using queue_t   = logging::ipc::reliable_message_queue ;
-    using backend_t = sinks::text_ipc_message_queue_backend< queue_t > ;
-    using sink_t    = sinks::synchronous_sink< backend_t >;
+	using backend_t = sinks::text_ipc_message_queue_backend< queue_t > ;
+	using sink_t    = sinks::synchronous_sink< backend_t >;
 
 	class Logger {
 
